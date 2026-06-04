@@ -1,21 +1,37 @@
 package com.grupo7.ticket_system.models;
+import java.util.ArrayList;
 
 public class User {
     
-    int id_user;
+    int userId;
     String email;
-    String document_country;
-    String document_type;
-    String document_number;
-    String street_address;
-    String number_address;
-    int postal_code;
-
-    public int getId_user() {
-        return id_user;
+    String documentCountry;
+    String documentType;
+    String documentNumber;
+    String streetAddress;
+    String numberAddress;
+    String postalCode;
+    int postalCodeId;
+    ArrayList<String> phones;
+    
+    public int getPostalCodeId() {
+        return postalCodeId;
     }
-    public void setId_user(int id_user) {
-        this.id_user = id_user;
+    public void setPostalCodeId(int postalCodeId) {
+        this.postalCodeId = postalCodeId;
+    }
+    
+    public ArrayList<String> getPhones() {
+        return phones;
+    }
+    public void setPhones(ArrayList<String> phones) {
+        this.phones = phones;
+    }
+    public int getUserId() {
+        return userId;
+    }
+    public void setUserId(int userId) {
+        this.userId = userId;
     }
     public String getEmail() {
         return email;
@@ -23,46 +39,48 @@ public class User {
     public void setEmail(String email) {
         this.email = email;
     }
-    public String getDocument_country() {
-        return document_country;
+    public String getDocumentCountry() {
+        return documentCountry;
     }
-    public void setDocument_country(String document_country) {
-        this.document_country = document_country;
+    public void setDocumentCountry(String documentCountry) {
+        this.documentCountry = documentCountry;
     }
-    public String getDocument_type() {
-        return document_type;
+    public String getDocumentType() {
+        return documentType;
     }
-    public void setDocument_type(String document_type) {
-        this.document_type = document_type;
+    public void setDocumentType(String documentType) {
+        this.documentType = documentType;
     }
-    public String getDocument_number() {
-        return document_number;
+    public String getDocumentNumber() {
+        return documentNumber;
     }
-    public void setDocument_number(String document_number) {
-        this.document_number = document_number;
+    public void setDocumentNumber(String documentNumber) {
+        this.documentNumber = documentNumber;
     }
-    public String getStreet_address() {
-        return street_address;
+    public String getStreetAddress() {
+        return streetAddress;
     }
-    public void setStreet_address(String street_address) {
-        this.street_address = street_address;
+    public void setStreetAddress(String streetAddress) {
+        this.streetAddress = streetAddress;
     }
-    public String getNumber_address() {
-        return number_address;
+    public String getNumberAddress() {
+        return numberAddress;
     }
-    public void setNumber_address(String number_address) {
-        this.number_address = number_address;
+    public void setNumberAddress(String numberAddress) {
+        this.numberAddress = numberAddress;
     }
-    public int getPostal_code() {
-        return postal_code;
+    public String getPostalCode() {
+        return postalCode;
     }
-    public void setPostal_code(int postal_code) {
-        this.postal_code = postal_code;
+    public void setPostalCode(String postalCode) {
+        this.postalCode = postalCode;
     }
     @Override
     public String toString() {
-        return "User [id_user=" + id_user + ", email=" + email + ", document_country=" + document_country
-                + ", document_type=" + document_type + ", document_number=" + document_number + ", street_address="
-                + street_address + ", number_address=" + number_address + ", postal_code=" + postal_code + "]";
+        return "User [userId=" + userId + ", email=" + email + ", documentCountry=" + documentCountry
+                + ", documentType=" + documentType + ", documentNumber=" + documentNumber + ", streetAddress="
+                + streetAddress + ", numberAddress=" + numberAddress + ", postalCode=" + postalCode + "]";
     }
+
+    
 }

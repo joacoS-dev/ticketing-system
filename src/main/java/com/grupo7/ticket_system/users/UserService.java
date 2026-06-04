@@ -1,8 +1,9 @@
 package com.grupo7.ticket_system.users;
+import java.util.ArrayList;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Repository;
 import org.springframework.stereotype.Service;
-
+import com.grupo7.ticket_system.models.User;
 
 @Service
 public class UserService{
@@ -10,7 +11,11 @@ public class UserService{
     @Autowired
     UserRepository userRepository;
     
-    public void registerUser(String mail, String pais_documento, String tipo_documento, String numero_documento, String calle_direccion, String numero_direccion, int id_codigo_postal){
-        
+    public User registerUser(User user){
+        if(userRepository.existsByMail(user.getEmail()) == false){
+        return userRepository.saveUser(user);
+        }else{
+            throw new IllegalArgumentException("Email alredy used");
+        }
     }
 }
