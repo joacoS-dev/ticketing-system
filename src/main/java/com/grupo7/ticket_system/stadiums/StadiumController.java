@@ -1,4 +1,4 @@
-package com.grupo7.ticket_system.stadium;
+package com.grupo7.ticket_system.stadiums;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -26,8 +26,8 @@ public class StadiumController {
         return stadiumService.getAllStadiums();
     }
 
-    @PostMapping("/saveSection")
-    public Section saveSection(@RequestBody Section section) {
-        return stadiumService.saveSection(section);
+    @PostMapping("/createSection")
+    public Section createSection(@RequestBody Section section) {
+        return stadiumService.createSection(section);
     }
 }

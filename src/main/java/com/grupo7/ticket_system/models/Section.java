@@ -6,7 +6,7 @@ public class Section {
     int stadiumId;
     int maxCapacity;
     int price;
-    String sectorLetter;
+    String sectionLetter;
 
     public String getSectionId() {
         return sectionId;
@@ -32,15 +32,15 @@ public class Section {
     public void setPrice(int price) {
         this.price = price;
     }
-    public String getSectorLetter() {
-        return sectorLetter;
+    public String getSectionLetter() {
+        return sectionLetter;
     }
-    public void setSectorLetter(String sectorLetter) {
-        this.sectorLetter = sectorLetter;
+    public void setSectionLetter(String sectorLetter) {
+        this.sectionLetter = sectorLetter;
     }
     @Override
     public String toString() {
         return "Section [sectorId=" + sectionId + ", stadiumId=" + stadiumId + ", maxCapacity=" + maxCapacity
-                + ", price=" + price + ", sectorLetter=" + sectorLetter + "]";
+                + ", price=" + price + ", sectorLetter=" + sectionLetter + "]";
     }
 }
