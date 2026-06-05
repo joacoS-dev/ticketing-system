@@ -17,7 +17,11 @@ public class UserController{
     UserService userService;
 
     @PostMapping("/registerUser")
-    public User registerUser(@RequestBody User user) { //@requestbody mapea las key del json a los atributos de la clase.
+    public User registerUser(@RequestBody User user) { //@requestbody maps json keys to object atributes.
         return userService.registerUser(user);
     }
+
+    /*@PostMapping("/logInUser")
+    public User logInUser(@RequestBody User user){
+    }*/
 }

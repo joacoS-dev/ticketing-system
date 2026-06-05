@@ -1,4 +1,4 @@
-package com.grupo7.ticket_system.stadiums;
+package com.grupo7.ticket_system.infrastructure;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -13,7 +13,7 @@ import com.grupo7.ticket_system.models.Section;
 import com.grupo7.ticket_system.models.Stadium;
 
 @Repository
-public class StadiumRepository {
+public class InfrastructureRepository {
 
     @Autowired
     private JdbcTemplate template;

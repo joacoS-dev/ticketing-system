@@ -14,7 +14,7 @@ public class EventRepository {
 
     //save event
     public Event saveEvent(Event event){
-        String sqltosaveevent= "INSERT INTO evento(fecha_evento,id_estadio,id_usuario,id_equipo_local,id_equipo_visitante) VALUES (?,?,?,?,?,?)";
+        String sqltosaveevent= "INSERT INTO evento(fecha_evento,id_estadio,id_usuario,id_equipo_local,id_equipo_visitante) VALUES (?,?,?,?,?)";
         template.update(sqltosaveevent,event.getEventDate(), event.getStadiumId(), event.getUserId(), event.getLocalTeamId(), 
                         event.getVisitorTeamId());
         return event;

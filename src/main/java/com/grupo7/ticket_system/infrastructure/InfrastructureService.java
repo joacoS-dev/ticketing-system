@@ -1,4 +1,4 @@
-package com.grupo7.ticket_system.stadiums;
+package com.grupo7.ticket_system.infrastructure;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -9,10 +9,10 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 @Service
-public class StadiumService {
+public class InfrastructureService {
     
     @Autowired
-    StadiumRepository stadiumRepository;
+    InfrastructureRepository stadiumRepository;
 
     public List<Stadium> getAllStadiums(){
         if(stadiumRepository.getAllStadiums() != null){
@@ -22,7 +22,7 @@ public class StadiumService {
         }
     }
 
-    public Section createSection(Section section){ //agregar logica de si un sector ya esta implementado etc
+    public Section createSection(Section section){ //the stadium id this method accept is any stadium, i need that one to be choosed by the admin.
         if(!stadiumRepository.existsByStadiumAndLetter(section)){
             return stadiumRepository.saveSection(section);
         }else{
