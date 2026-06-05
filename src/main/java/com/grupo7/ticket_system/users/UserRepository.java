@@ -12,7 +12,7 @@ public class UserRepository {
     @Autowired
     private JdbcTemplate template;
 
-    public User saveUser(User user){
+    public User saveRegisteredUser(User user){
 
         //conseguir codigo postal
         String sqltogetpostalcodeid= "SELECT id_codigo_postal FROM codigo_postal_direccion WHERE codigo_postal = ?";
@@ -28,18 +28,20 @@ public class UserRepository {
                         user.getNumberAddress(),user.getPostalCodeId());
 
         //conseguir id del usuario (autogenerado x la base de datos)
-        String sqltogetuserid= "SELECT LAST_INSERT_ID() FROM";        
+        String sqltogetuserid= "SELECT LAST_INSERT_ID()";        
         user.setUserId(template.queryForObject(sqltogetuserid, int.class));
 
         //guardar telefonos vinculados al usuario
         String sqltosavephones= "INSERT INTO telefono(numero_telefono, id_usuario) VALUES (?,?)";
-        template.update(sqltosavephones,user.getPhones(),user.getUserId());
+        for(String phone: user.getPhones()){
+            template.update(sqltosavephones,phone,user.getUserId());
+        }
 
         return user;
     }
 
     public boolean existsByMail(String mail){
-        //buscar usuario con ese mail en db
+        //buscar mail en db
         String sql= "SELECT COUNT(*) FROM usuario WHERE mail= ?";
         return template.queryForObject(sql, int.class, mail) >0;
     }

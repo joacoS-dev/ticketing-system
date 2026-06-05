@@ -10,10 +10,10 @@ public class UserService{
 
     @Autowired
     UserRepository userRepository;
-    
+
     public User registerUser(User user){
         if(userRepository.existsByMail(user.getEmail()) == false){
-        return userRepository.saveUser(user);
+        return userRepository.saveRegisteredUser(user);
         }else{
             throw new IllegalArgumentException("Email alredy used");
         }

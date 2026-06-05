@@ -9,7 +9,6 @@ import org.springframework.web.bind.annotation.RestController;
 import com.grupo7.ticket_system.users.UserRepository;
 
 @SpringBootApplication
-@RestController //?¿?¿?¿?¿?¿?¿?¿?¿?¿?
 public class Application {
 
 	public static void main(String[] args) {
@@ -23,5 +22,4 @@ public class Application {
             System.out.println("Filas insertadas: " + filas);
         };
     }*/
-	
 }

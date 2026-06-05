@@ -20,7 +20,6 @@ public class User {
     public void setPostalCodeId(int postalCodeId) {
         this.postalCodeId = postalCodeId;
     }
-    
     public ArrayList<String> getPhones() {
         return phones;
     }
@@ -81,6 +80,4 @@ public class User {
                 + ", documentType=" + documentType + ", documentNumber=" + documentNumber + ", streetAddress="
                 + streetAddress + ", numberAddress=" + numberAddress + ", postalCode=" + postalCode + "]";
     }
-
-    
 }
