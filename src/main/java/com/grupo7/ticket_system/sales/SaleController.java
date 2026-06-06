@@ -20,6 +20,6 @@ public class SaleController {
 
     @PostMapping("/createSale")
     public Sale createSale(@RequestBody RequestSale requestSale){
-        return saleService.createSale(requestSale.getSell(), requestSale.getTickets());
+        return saleService.createSale(requestSale);
     }
 }

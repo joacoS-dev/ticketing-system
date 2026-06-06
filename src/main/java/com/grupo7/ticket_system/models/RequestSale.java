@@ -4,14 +4,14 @@ import java.util.List;
 
 public class RequestSale {
     
-    Sale sell;
+    Sale sale;
     List<Ticket> tickets;
 
-    public Sale getSell() {
-        return sell;
+    public Sale getSale() {
+        return sale;
     }
-    public void setSell(Sale sell) {
-        this.sell = sell;
+    public void setSale(Sale sell) {
+        this.sale = sell;
     }
     public List<Ticket> getTickets() {
         return tickets;
@@ -21,6 +21,6 @@ public class RequestSale {
     }
     @Override
     public String toString() {
-        return "RequestSell [sell=" + sell + ", tickets=" + tickets + "]";
+        return "RequestSell [sell=" + sale + ", tickets=" + tickets + "]";
     }
 }
