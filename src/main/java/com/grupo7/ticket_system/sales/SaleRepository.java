@@ -1,8 +1,10 @@
 package com.grupo7.ticket_system.sales;
 
+import java.time.LocalDateTime;
 import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.cglib.core.Local;
 import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.stereotype.Repository;
 import com.grupo7.ticket_system.models.Sale;
@@ -16,9 +18,14 @@ public class SaleRepository {
     JdbcTemplate template;
     
     public Sale saveSale(Sale sale){
-        String sqltosavesale= "INSERT INTO venta(fecha_venta, estado, monto_total, porcentaje_comision_aplicado, id_usuario, id_tasa_comision) VALUES(?,?,?,?,?,?)";
-        template.update(sqltosavesale, sale.getSaleDate(), sale.getState(), sale.getTotalSalePrice(), sale.getComissionRate(),
+        String sqltosavesale= "INSERT INTO venta(estado, monto_total, porcentaje_comision_aplicado, id_usuario, id_tasa_comision) VALUES(?,?,?,?,?)";
+        template.update(sqltosavesale,sale.getState(), sale.getTotalSalePrice(), sale.getComissionRate(),
                         sale.getUserId(), sale.getComissionRateId());
+        
+        String sqltogetsaleid= "SELECT LAST_INSERT_ID()";
+        int generatedId= template.queryForObject(sqltogetsaleid,int.class);
+        sale.setSaleId(generatedId);
+        sale.setSaleDate(LocalDateTime.now());
         return sale;
     }
 

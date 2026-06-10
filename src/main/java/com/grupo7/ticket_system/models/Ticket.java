@@ -2,7 +2,7 @@ package com.grupo7.ticket_system.models;
 
 public class Ticket {
     int ticketId;
-    int transfersMade;
+    int transfersMade= 0;
     String sectionId;
     int stadiumId;
     int saleId;

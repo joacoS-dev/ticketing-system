@@ -17,13 +17,16 @@ public class SaleService {
     SaleRepository saleRepository;
 
     public Sale createSale(RequestSale requestSale){ 
+        
+        Sale savedSale= saleRepository.saveSale(requestSale.getSale());
+
         for(Ticket ticket:requestSale.getTickets()){
-            ticket.setSaleId(666); //set a valid saleId (take from last saleid created database)
-            ticket.setTransfersMade(0);
-            ticket.setUserId(666);//set a valid userId(take from web session)
-            ticket.setEventId(666); //set a valid eventId (take from database)
-        }
-        saleRepository.saveTicket(requestSale.getTickets()); 
-        return saleRepository.saveSale(requestSale.getSale()); //set a valid userId; set a valid id_tasa_comision.
+                ticket.setSaleId(savedSale.getSaleId()); 
+                ticket.setUserId(savedSale.getUserId());
+                //ticket.setEventId(666); //set a valid eventId (take from database)?¿?¿?¿?¿?¿?
+            }
+            saleRepository.saveTicket(requestSale.getTickets()); 
+            
+        return savedSale;
     }
 }
