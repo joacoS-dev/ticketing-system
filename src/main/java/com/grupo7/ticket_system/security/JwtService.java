@@ -1,11 +1,7 @@
 package com.grupo7.ticket_system.security;
-
 import java.util.Date;
-
 import javax.crypto.SecretKey;
-
 import com.grupo7.ticket_system.models.User;
-
 import io.jsonwebtoken.Jwts;
 import io.jsonwebtoken.security.Keys;
 

@@ -1,6 +1,4 @@
 package com.grupo7.ticket_system.infrastructure;
-
-
 import java.util.List;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -10,8 +8,6 @@ import com.grupo7.ticket_system.models.Stadium;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
-
-
 
 @RestController
 @RequestMapping("/infrastructure")

@@ -1,14 +1,11 @@
 package com.grupo7.ticket_system.infrastructure;
-
 import java.util.ArrayList;
 import java.util.List;
-
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.jdbc.core.BeanPropertyRowMapper;
 import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.jdbc.core.RowMapper;
 import org.springframework.stereotype.Repository;
-
 import com.grupo7.ticket_system.models.Section;
 import com.grupo7.ticket_system.models.Stadium;
 

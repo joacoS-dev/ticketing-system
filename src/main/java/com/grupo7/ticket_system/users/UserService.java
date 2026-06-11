@@ -1,13 +1,15 @@
 package com.grupo7.ticket_system.users;
-import java.util.ArrayList;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.security.core.userdetails.UserDetails;
+import org.springframework.security.core.userdetails.UserDetailsService;
+import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.security.crypto.password.PasswordEncoder;
-import org.springframework.stereotype.Repository;
 import org.springframework.stereotype.Service;
+import com.grupo7.ticket_system.models.User;
 import com.grupo7.ticket_system.models.User;
 
 @Service
-public class UserService{
+public class UserService implements UserDetailsService{
 
     @Autowired
     UserRepository userRepository;
@@ -16,9 +18,16 @@ public class UserService{
 
     public User registerUser(User user){
         if(!userRepository.existsByMail(user.getEmail())){
-        return userRepository.saveUser(user);
+            String hashed= encoder.encode(user.getPassword());
+            user.setPassword(hashed);
+            return userRepository.saveUser(user);
         }else{
             throw new IllegalArgumentException("Email alredy used");
         }
+    }
+
+    @Override
+    public UserDetails loadUserByUsername(String username) throws UsernameNotFoundException {
+        return userRepository.getUserByUsername(username);
     }
 }

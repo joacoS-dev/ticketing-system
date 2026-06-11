@@ -1,5 +1,4 @@
 package com.grupo7.ticket_system.models;
-
 import java.util.List;
 
 public class RequestSale {

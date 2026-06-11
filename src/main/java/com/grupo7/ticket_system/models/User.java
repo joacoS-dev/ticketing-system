@@ -1,7 +1,11 @@
 package com.grupo7.ticket_system.models;
 import java.util.ArrayList;
+import java.util.Collection;
 
-public class User {
+import org.springframework.security.core.GrantedAuthority;
+import org.springframework.security.core.userdetails.UserDetails;
+
+public class User implements UserDetails {
     
     int userId;
     String email;
@@ -15,7 +19,14 @@ public class User {
     ArrayList<String> phones;
     String username;
     String password;
+    String rol= "general";
     
+    public String getRol() {
+        return rol;
+    }
+    public void setRol(String rol) {
+        this.rol = rol;
+    }
     public String getUsername() {
         return username;
     }
@@ -93,5 +104,10 @@ public class User {
         return "User [userId=" + userId + ", email=" + email + ", documentCountry=" + documentCountry
                 + ", documentType=" + documentType + ", documentNumber=" + documentNumber + ", streetAddress="
                 + streetAddress + ", numberAddress=" + numberAddress + ", postalCode=" + postalCode + "]";
+    }
+    @Override
+    public Collection<? extends GrantedAuthority> getAuthorities() {
+        throw new UnsupportedOperationException("Unimplemented method 'getAuthorities'");   //IMPLEMENT rol
+
     }
 }
