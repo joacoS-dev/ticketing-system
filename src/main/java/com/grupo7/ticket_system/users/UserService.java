@@ -1,6 +1,7 @@
 package com.grupo7.ticket_system.users;
 import java.util.ArrayList;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Repository;
 import org.springframework.stereotype.Service;
 import com.grupo7.ticket_system.models.User;
@@ -10,6 +11,8 @@ public class UserService{
 
     @Autowired
     UserRepository userRepository;
+    @Autowired
+    PasswordEncoder encoder;
 
     public User registerUser(User user){
         if(!userRepository.existsByMail(user.getEmail())){

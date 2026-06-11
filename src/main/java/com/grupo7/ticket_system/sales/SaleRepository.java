@@ -17,6 +17,7 @@ public class SaleRepository {
     @Autowired
     JdbcTemplate template;
     
+    //save sale
     public Sale saveSale(Sale sale){
         String sqltosavesale= "INSERT INTO venta(estado, monto_total, porcentaje_comision_aplicado, id_usuario, id_tasa_comision) VALUES(?,?,?,?,?)";
         template.update(sqltosavesale,sale.getState(), sale.getTotalSalePrice(), sale.getComissionRate(),
@@ -29,6 +30,7 @@ public class SaleRepository {
         return sale;
     }
 
+    //save ticket
     public void saveTicket(List<Ticket> tickets){
         String sqltosaveticket="INSERT INTO entrada(cantidad_transferencias_realizadas, id_sector, id_estadio,id_venta, id_evento, id_usuario) VALUES(?,?,?,?,?,?)";
         for(Ticket ticket:tickets){
