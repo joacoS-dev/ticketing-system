@@ -1,20 +1,25 @@
-package com.grupo7.ticket_system.security;
+package com.grupo7.ticket_system.LoginSecurity;
 import java.util.Date;
 import javax.crypto.SecretKey;
+
+import org.springframework.security.core.userdetails.UserDetails;
+import org.springframework.stereotype.Component;
+
 import com.grupo7.ticket_system.models.User;
 import io.jsonwebtoken.Jwts;
 import io.jsonwebtoken.security.Keys;
 
+@Component
 public class JwtService {
     
-    private final String SECRET= "esto-es-un-secreto-entre-nostros256"; //put this in application.properties
+    private final String SECRET= "esto-es-un-secreto-entre-nostros256bitsssss!!!!!"; //"You shall not steal" Exodus 20:15
 
     private SecretKey getKey(){
         return Keys.hmacShaKeyFor(SECRET.getBytes());
     }
 
     public String generateToken(String username){
-        return Jwts.builder().subject(username).issuedAt(new Date()).expiration(new Date(System.currentTimeMillis() + 360000)).
+        return Jwts.builder().subject(username).issuedAt(new Date()).expiration(new Date(System.currentTimeMillis() + 3600000)).
         signWith(getKey()).compact();
     }
 
@@ -26,8 +31,8 @@ public class JwtService {
         return Jwts.parser().verifyWith(getKey()).build().parseSignedClaims(token).getPayload().getExpiration().before(new Date()); 
     }
 
-    public boolean isValid(String token, User user){
+    public boolean isValid(String token, UserDetails userDetails){
         String username= extractUsername(token);
-        return username.equals(user.getUsername()) && !isExpired(token);
+        return username.equals(userDetails.getUsername()) && !isExpired(token);
     }
 }

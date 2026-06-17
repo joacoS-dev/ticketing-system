@@ -12,8 +12,11 @@ import com.grupo7.ticket_system.models.Stadium;
 @Repository
 public class InfrastructureRepository {
 
-    @Autowired
-    private JdbcTemplate template;
+    private final JdbcTemplate template;
+
+    InfrastructureRepository(JdbcTemplate template) {
+        this.template = template;
+    }
 
     //get all stadiums
     public List<Stadium> getAllStadiums(){
@@ -28,7 +31,7 @@ public class InfrastructureRepository {
     }
 
     //save section
-    public Section saveSection(Section section){//id_estadio no es id del estadio real (ver como manejarlo, el admin entra a x estadio y ahi dentor puede crear sectores, entonces el id estdio ya es fijo, x parametro?)
+    public Section saveSection(Section section){
         String sqltosavesection= "INSERT INTO sector(id_sector, id_estadio, capacidad_maxima, costo, letra_sector) VALUES (?,?,?,?,?)";
         template.update(sqltosavesection, section.getSectionId(), section.getStadiumId(), section.getMaxCapacity(), 
                         section.getPrice(), section.getSectionLetter());

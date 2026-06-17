@@ -1,8 +1,10 @@
 package com.grupo7.ticket_system.models;
 import java.util.ArrayList;
 import java.util.Collection;
+import java.util.List;
 
 import org.springframework.security.core.GrantedAuthority;
+import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.security.core.userdetails.UserDetails;
 
 public class User implements UserDetails {
@@ -19,7 +21,7 @@ public class User implements UserDetails {
     ArrayList<String> phones;
     String username;
     String password;
-    String rol= "general";
+    String rol= "USER";
     
     public String getRol() {
         return rol;
@@ -107,7 +109,8 @@ public class User implements UserDetails {
     }
     @Override
     public Collection<? extends GrantedAuthority> getAuthorities() {
-        throw new UnsupportedOperationException("Unimplemented method 'getAuthorities'");   //IMPLEMENT rol
-
+        return List.of(new SimpleGrantedAuthority("ROLE_" + rol)) ; //IMPLEMENT rol
     }
+
+    
 }

@@ -6,10 +6,18 @@ import com.grupo7.ticket_system.models.Event;
 @Service
 public class EventService {
     
-    @Autowired
-    EventRepository eventRepository;
+    private final EventRepository eventRepository;
+
+    EventService(EventRepository eventRepository) {
+        this.eventRepository = eventRepository;
+    }
 
     public Event createEvent(Event event){
-        return eventRepository.saveEvent(event);
+        if(!eventRepository.existsByStadiumAndDateTime(event)){
+            return eventRepository.saveEvent(event);
+        }
+        else{
+             throw new IllegalArgumentException("An event already exists in the stadium at this time");
+        }
     }
 }

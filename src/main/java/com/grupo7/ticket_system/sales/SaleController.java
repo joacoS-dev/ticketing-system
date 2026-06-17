@@ -11,8 +11,11 @@ import org.springframework.web.bind.annotation.RequestBody;
 @RequestMapping("/sales")
 public class SaleController {
     
-    @Autowired
-    SaleService saleService;
+    private final SaleService saleService;
+
+    SaleController(SaleService saleService) {
+        this.saleService = saleService;
+    }
 
     @PostMapping("/createSale")
     public Sale createSale(@RequestBody RequestSale requestSale){

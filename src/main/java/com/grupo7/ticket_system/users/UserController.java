@@ -1,20 +1,45 @@
 package com.grupo7.ticket_system.users;
+import java.net.Authenticator;
+import java.util.Map;
+import org.apache.tomcat.util.descriptor.web.LoginConfig;
+import org.apache.tomcat.util.net.openssl.ciphers.Authentication;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.ResponseEntity;
+import org.springframework.security.authentication.AuthenticationManager;
+import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
+
+import com.grupo7.ticket_system.LoginSecurity.JwtService;
 import com.grupo7.ticket_system.models.User;
 
 @RestController
-@RequestMapping("/user")
+@RequestMapping("/users")
 public class UserController{
 
-    @Autowired
-    UserService userService;
+    private final UserService userService;
+    private final JwtService jwtService;
+    private final AuthenticationManager authenticationManager;
+
+    record LoginRequest(String username, String password) {}
+
+    UserController(UserService userService, JwtService jwtService, AuthenticationManager authenticationManager) {
+        this.userService = userService;
+        this.jwtService = jwtService;
+        this.authenticationManager = authenticationManager;
+    }
 
     @PostMapping("/registerUser")
-    public User registerUser(@RequestBody User user) { //@requestbody maps json keys to object atributes.
+    public User registerUser(@RequestBody User user) { 
         return userService.registerUser(user);
+    }
+
+    @PostMapping("/loginUser")
+    public ResponseEntity<Map<String,String>> loginUser(@RequestBody LoginRequest loginRequest) {
+        authenticationManager.authenticate(new UsernamePasswordAuthenticationToken(loginRequest.username(), loginRequest.password()));
+        String token= jwtService.generateToken(loginRequest.username());
+        return ResponseEntity.ok(Map.of("token", token));
     }
 }

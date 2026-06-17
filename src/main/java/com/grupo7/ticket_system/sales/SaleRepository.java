@@ -10,8 +10,11 @@ import com.grupo7.ticket_system.models.Ticket;
 @Repository
 public class SaleRepository {
     
-    @Autowired
-    JdbcTemplate template;
+    final JdbcTemplate template;
+
+    SaleRepository(JdbcTemplate template) {
+        this.template = template;
+    }
     //save sale
     public Sale saveSale(Sale sale){
         String sqltosavesale= "INSERT INTO venta(estado, monto_total, porcentaje_comision_aplicado, id_usuario, id_tasa_comision) VALUES(?,?,?,?,?)";
@@ -26,9 +29,9 @@ public class SaleRepository {
     }
     //save ticket
     public void saveTicket(List<Ticket> tickets){
-        String sqltosaveticket="INSERT INTO entrada(cantidad_transferencias_realizadas, id_sector, id_estadio,id_venta, id_evento, id_usuario) VALUES(?,?,?,?,?,?)";
+        String sqltosaveticket="INSERT INTO entrada(cantidad_transferencias_realizadas,token_qr id_sector, id_estadio,id_venta, id_evento, id_usuario) VALUES(?,?,?,?,?,?)";
         for(Ticket ticket:tickets){
-            template.update(sqltosaveticket, ticket.getTransfersMade(), ticket.getSectionId(),ticket.getStadiumId(), ticket.getSaleId(), 
+            template.update(sqltosaveticket, ticket.getTransfersMade(), ticket.getQrToken(),ticket.getSectionId(),ticket.getStadiumId(), ticket.getSaleId(), 
                             ticket.getEventId(), ticket.getUserId());
         }  
     } 

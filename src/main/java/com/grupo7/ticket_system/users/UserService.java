@@ -11,10 +11,13 @@ import com.grupo7.ticket_system.models.User;
 @Service
 public class UserService implements UserDetailsService{
 
-    @Autowired
-    UserRepository userRepository;
-    @Autowired
-    PasswordEncoder encoder;
+    private final UserRepository userRepository;
+    private final PasswordEncoder encoder;
+
+    UserService(UserRepository userRepository, PasswordEncoder encoder) {
+        this.userRepository = userRepository;
+        this.encoder = encoder;
+    }
 
     public User registerUser(User user){
         if(!userRepository.existsByMail(user.getEmail())){

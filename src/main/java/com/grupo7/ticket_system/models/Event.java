@@ -1,9 +1,12 @@
 package com.grupo7.ticket_system.models;
 import java.time.LocalDateTime;
 
+import com.fasterxml.jackson.annotation.JsonFormat;
+
 public class Event {
 
     int eventId;
+    @JsonFormat(pattern = "yyyy-MM-dd HH:mm")
     LocalDateTime eventDate;
     int stadiumId;
     int userId;

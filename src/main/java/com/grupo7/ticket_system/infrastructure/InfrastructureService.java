@@ -9,22 +9,26 @@ import org.springframework.stereotype.Service;
 @Service
 public class InfrastructureService {
     
-    @Autowired
-    InfrastructureRepository stadiumRepository;
+    private final InfrastructureRepository infrastructureRepository;
 
-    public List<Stadium> getAllStadiums(){
-        if(stadiumRepository.getAllStadiums() != null){
-            return stadiumRepository.getAllStadiums();
+    InfrastructureService(InfrastructureRepository infrastructureRepository) {
+        this.infrastructureRepository = infrastructureRepository;
+    }
+
+    public Section createSection(Section section, int stadiumId){ 
+        if(!infrastructureRepository.existsByStadiumAndLetter(section)){
+            section.setStadiumId(stadiumId);
+            return infrastructureRepository.saveSection(section);
         }else{
-            throw new IllegalArgumentException("No stadiums registered");
+            throw new IllegalArgumentException("Section already created in the stadium");
         }
     }
 
-    public Section createSection(Section section){ //the stadium id this method accept is any stadium, i need that one to be choosed by the admin.
-        if(!stadiumRepository.existsByStadiumAndLetter(section)){
-            return stadiumRepository.saveSection(section);
+    public List<Stadium> getAllStadiums(){
+        if(infrastructureRepository.getAllStadiums() != null){
+            return infrastructureRepository.getAllStadiums();
         }else{
-            throw new IllegalArgumentException("Section already created in the stadium");
+            throw new IllegalArgumentException("No stadiums registered");
         }
     }
 }

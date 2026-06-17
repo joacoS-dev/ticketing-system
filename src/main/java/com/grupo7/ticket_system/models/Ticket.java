@@ -3,6 +3,7 @@ package com.grupo7.ticket_system.models;
 public class Ticket {
     int ticketId;
     int transfersMade= 0;
+    String qrToken;
     String sectionId;
     int stadiumId;
     int saleId;
@@ -10,6 +11,12 @@ public class Ticket {
     int eventId;
     int userId;
     
+    public String getQrToken() {
+        return qrToken;
+    }
+    public void setQrToken(String qrToken) {
+        this.qrToken = qrToken;
+    }
     public int getTicketId() {
         return ticketId;
     }

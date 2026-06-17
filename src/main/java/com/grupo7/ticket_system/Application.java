@@ -10,16 +10,7 @@ import com.grupo7.ticket_system.users.UserRepository;
 
 @SpringBootApplication
 public class Application {
-
 	public static void main(String[] args) {
 		SpringApplication.run(Application.class, args);
 	}
-
-	/*@Bean
-    CommandLineRunner probar(UserRepository repo) {
-        return args -> {
-            int filas = repo.saveTeam(22, "NACIONAL");
-            System.out.println("Filas insertadas: " + filas);
-        };
-    }*/
 }

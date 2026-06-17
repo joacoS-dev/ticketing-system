@@ -7,11 +7,14 @@ import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 
 @RestController
-@RequestMapping("/event")
+@RequestMapping("/events")
 public class EventController {
     
-    @Autowired
-    EventService eventService;
+    private final EventService eventService;
+
+    EventController(EventService eventService) {
+        this.eventService = eventService;
+    }
 
     @PostMapping("/createEvent")
     public Event createEvent(@RequestBody Event event) {
