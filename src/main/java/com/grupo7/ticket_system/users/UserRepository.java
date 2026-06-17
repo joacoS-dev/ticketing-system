@@ -57,6 +57,6 @@ public class UserRepository {
 
     public int findUserIdByUsername(String username){
         String sqltofinduserid= "SELECT id_usuario FROM usuario WHERE nombre_usuario= ?";
-        return template.queryForObject(sqltofinduserid, int.class);
+        return template.queryForObject(sqltofinduserid, int.class,username);
     }
 }

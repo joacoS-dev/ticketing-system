@@ -17,18 +17,17 @@ public class SaleRepository {
     }
     //save sale
     public Sale saveSale(Sale sale){
-        String sqltosavesale= "INSERT INTO venta(estado, monto_total, porcentaje_comision_aplicado, id_usuario, id_tasa_comision) VALUES(?,?,?,?,?)";
-        template.update(sqltosavesale,sale.getState(), sale.getTotalSalePrice(), sale.getComissionRate(),
+        String sqltosavesale= "INSERT INTO venta(estado, fecha_venta, monto_total, porcentaje_comision_aplicado, id_usuario, id_tasa_comision) VALUES(?,?,?,?,?,?)";
+        template.update(sqltosavesale,sale.getState(),sale.getSaleDate(), sale.getTotalSalePrice(), sale.getComissionRate(),
                         sale.getUserId(), sale.getComissionRateId());
         
         String sqltogetsaleid= "SELECT LAST_INSERT_ID()";
         sale.setSaleId(template.queryForObject(sqltogetsaleid,int.class));
-        sale.setSaleDate(LocalDateTime.now());
         return sale;
     }
     //save ticket
     public void saveTicket(List<Ticket> tickets){
-        String sqltosaveticket="INSERT INTO entrada(cantidad_transferencias_realizadas,token_qr id_sector, id_estadio,id_venta, id_evento, id_usuario) VALUES(?,?,?,?,?,?)";
+        String sqltosaveticket="INSERT INTO entrada(cantidad_transferencias_realizadas,qr_entrada, id_sector, id_estadio,id_venta, id_evento, id_usuario) VALUES(?,?,?,?,?,?,?)";
         for(Ticket ticket:tickets){
             template.update(sqltosaveticket, ticket.getTransfersMade(), ticket.getQrToken(),ticket.getSectionId(),ticket.getStadiumId(), ticket.getSaleId(), 
                             ticket.getEventId(), ticket.getUserId());

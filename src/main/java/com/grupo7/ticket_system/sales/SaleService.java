@@ -1,4 +1,5 @@
 package com.grupo7.ticket_system.sales;
+import java.time.LocalDateTime;
 import java.util.UUID;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -23,6 +24,7 @@ public class SaleService {
 
     public Sale createSale(RequestSale requestSale, int eventId){ 
         Sale savedSale= requestSale.getSale();
+        savedSale.setSaleDate(LocalDateTime.now());
         savedSale.setUserId(userRepository.findUserIdByUsername(SecurityContextHolder.getContext().getAuthentication().getName()));
         saleRepository.saveSale(savedSale);
         for(Ticket ticket:requestSale.getTickets()){
