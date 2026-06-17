@@ -4,6 +4,7 @@ import org.springframework.web.bind.annotation.RestController;
 import com.grupo7.ticket_system.models.RequestSale;
 import com.grupo7.ticket_system.models.Sale;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 
@@ -17,8 +18,10 @@ public class SaleController {
         this.saleService = saleService;
     }
 
-    @PostMapping("/createSale")
-    public Sale createSale(@RequestBody RequestSale requestSale){
-        return saleService.createSale(requestSale);
+    @PostMapping("/{eventId}/createSale")
+    public Sale createSale(@RequestBody RequestSale requestSale, @PathVariable int eventId){
+        return saleService.createSale(requestSale,eventId);
     }
 }
+
+

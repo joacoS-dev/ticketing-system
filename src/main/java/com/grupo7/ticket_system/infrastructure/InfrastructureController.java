@@ -21,7 +21,7 @@ public class InfrastructureController {
         this.stadiumService = stadiumService;
     }
 
-    @PostMapping("{stadiumId}/createSection")
+    @PostMapping("/{stadiumId}/createSection")
     public Section createSection(@RequestBody Section section, @PathVariable int stadiumId) {
         return stadiumService.createSection(section,stadiumId);
     }

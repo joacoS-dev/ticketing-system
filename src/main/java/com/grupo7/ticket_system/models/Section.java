@@ -2,18 +2,19 @@ package com.grupo7.ticket_system.models;
 
 public class Section {
     
-    String sectionId;
+    int sectionId;
     int stadiumId;
     int maxCapacity;
     int price;
     String sectionLetter;
 
-    public String getSectionId() {
+    public int getSectionId() {
         return sectionId;
     }
-    public void setSectionId(String sectionId) {
+    public void setSectionId(int sectionId) {
         this.sectionId = sectionId;
     }
+    
     public int getStadiumId() {
         return stadiumId;
     }

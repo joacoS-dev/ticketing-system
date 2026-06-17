@@ -9,10 +9,17 @@ public class Event {
     @JsonFormat(pattern = "yyyy-MM-dd HH:mm")
     LocalDateTime eventDate;
     int stadiumId;
-    int userId;
+    int adminId;
     int localTeamId;
     int visitorTeamId;
     
+    public int getAdminId() {
+        return adminId;
+    }
+    public void setAdminId(int adminId) {
+        this.adminId = adminId;
+    }
+
     public int getEventId() {
         return eventId;
     }
@@ -31,12 +38,7 @@ public class Event {
     public void setStadiumId(int stadiumId) {
         this.stadiumId = stadiumId;
     }
-    public int getUserId() {
-        return userId;
-    }
-    public void setUserId(int userId) {
-        this.userId = userId;
-    }
+    
     public int getLocalTeamId() {
         return localTeamId;
     }
@@ -53,6 +55,6 @@ public class Event {
     @Override
     public String toString() {
         return "Event [eventId=" + eventId + ", eventDate=" + eventDate + ", stadiumId=" + stadiumId + ", userId="
-                + userId + ", localTeamId=" + localTeamId + ", visitor=" + visitorTeamId + "]";
+                + adminId + ", localTeamId=" + localTeamId + ", visitor=" + visitorTeamId + "]";
     }
 }

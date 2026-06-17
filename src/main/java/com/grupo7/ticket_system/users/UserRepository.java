@@ -54,4 +54,9 @@ public class UserRepository {
         String sqltogetuserbyusername= "SELECT nombre_usuario, contrasena, rol FROM usuario WHERE nombre_usuario= ?";
         return template.queryForObject(sqltogetuserbyusername, (rs,rownum)-> org.springframework.security.core.userdetails.User.withUsername(rs.getString("nombre_usuario")).password(rs.getString("contrasena")).roles(rs.getString("rol")).build(),username);
     }
+
+    public int findUserIdByUsername(String username){
+        String sqltofinduserid= "SELECT id_usuario FROM usuario WHERE nombre_usuario= ?";
+        return template.queryForObject(sqltofinduserid, int.class);
+    }
 }

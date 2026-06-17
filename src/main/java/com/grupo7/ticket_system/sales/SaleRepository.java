@@ -22,8 +22,7 @@ public class SaleRepository {
                         sale.getUserId(), sale.getComissionRateId());
         
         String sqltogetsaleid= "SELECT LAST_INSERT_ID()";
-        int generatedId= template.queryForObject(sqltogetsaleid,int.class);
-        sale.setSaleId(generatedId);
+        sale.setSaleId(template.queryForObject(sqltogetsaleid,int.class));
         sale.setSaleDate(LocalDateTime.now());
         return sale;
     }

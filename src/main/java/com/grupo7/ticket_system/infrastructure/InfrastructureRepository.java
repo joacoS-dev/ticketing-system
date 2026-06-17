@@ -32,9 +32,11 @@ public class InfrastructureRepository {
 
     //save section
     public Section saveSection(Section section){
-        String sqltosavesection= "INSERT INTO sector(id_sector, id_estadio, capacidad_maxima, costo, letra_sector) VALUES (?,?,?,?,?)";
-        template.update(sqltosavesection, section.getSectionId(), section.getStadiumId(), section.getMaxCapacity(), 
+        String sqltosavesection= "INSERT INTO sector(id_estadio, capacidad_maxima, costo, letra_sector) VALUES (?,?,?,?)";
+        template.update(sqltosavesection, section.getStadiumId(), section.getMaxCapacity(), 
                         section.getPrice(), section.getSectionLetter());
+        String sqltogetsectionid= "SELECT LAST_INSERT_ID()";
+        section.setSectionId(template.queryForObject(sqltogetsectionid, int.class));
         return section;
     }
 
