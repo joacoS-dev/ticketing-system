@@ -46,16 +46,18 @@ public class UserRepository {
 
     //check if the email exists in database
     public boolean existsByMail(String mail){
-        String sqltofindbyemail= "SELECT COUNT(*) FROM usuario WHERE mail= ?";
+        String sqltofindbyemail= "SELECT COUNT(*) FROM usuario JOIN usuario_general ON usuario.id_usuario=usuario_general.id_usuario WHERE usuario.mail=?";
         return template.queryForObject(sqltofindbyemail, int.class, mail) >0;
     }
 
+    //get object user by string username
     public UserDetails getUserByUsername(String username){
         String sqltogetuserbyusername= "SELECT nombre_usuario, contrasena, rol FROM usuario WHERE nombre_usuario= ?";
         return template.queryForObject(sqltogetuserbyusername, (rs,rownum)-> org.springframework.security.core.userdetails.User.withUsername(rs.getString("nombre_usuario")).password(rs.getString("contrasena")).roles(rs.getString("rol")).build(),username);
     }
 
-    public int findUserIdByUsername(String username){
+    //get userId by string username
+    public int getUserIdByUsername(String username){
         String sqltofinduserid= "SELECT id_usuario FROM usuario WHERE nombre_usuario= ?";
         return template.queryForObject(sqltofinduserid, int.class,username);
     }

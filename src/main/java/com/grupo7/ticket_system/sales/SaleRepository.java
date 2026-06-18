@@ -10,7 +10,7 @@ import com.grupo7.ticket_system.models.Ticket;
 @Repository
 public class SaleRepository {
     
-    final JdbcTemplate template;
+    private final JdbcTemplate template;
 
     SaleRepository(JdbcTemplate template) {
         this.template = template;
@@ -32,5 +32,10 @@ public class SaleRepository {
             template.update(sqltosaveticket, ticket.getTransfersMade(), ticket.getQrToken(),ticket.getSectionId(),ticket.getStadiumId(), ticket.getSaleId(), 
                             ticket.getEventId(), ticket.getUserId());
         }  
-    } 
+    }
+
+    public boolean ticketCanBeTransfered(int idTicket){
+        String sqltogettransfersnum= "SELECT cantidad_transferencias_realizadas FROM entrada WHERE id_entrada=?";
+        return template.queryForObject(sqltogettransfersnum, int.class, idTicket) < 3;
+    }
 }

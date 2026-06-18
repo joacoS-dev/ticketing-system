@@ -19,8 +19,8 @@ public class SaleController {
     }
 
     @PostMapping("/{eventId}/createSale")
-    public Sale createSale(@RequestBody RequestSale requestSale, @PathVariable int eventId){
-        return saleService.createSale(requestSale,eventId);
+    public Sale createSale(@PathVariable int eventId, @RequestBody RequestSale requestSale){
+        return saleService.createSale(eventId, requestSale);
     }
 }
 
