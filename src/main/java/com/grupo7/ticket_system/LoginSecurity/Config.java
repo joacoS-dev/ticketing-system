@@ -33,7 +33,7 @@ public class Config {
     @Bean
     public SecurityFilterChain filterChain(HttpSecurity http) throws Exception {
         http.cors(cors -> cors.configure(http)).csrf(csrf -> csrf.disable()).sessionManagement(session -> session.sessionCreationPolicy(SessionCreationPolicy.STATELESS)).authorizeHttpRequests(auth -> auth
-        .requestMatchers("/users/loginUser", "/users/registerUser","/error").permitAll().requestMatchers("/events/**", "/infrastructures/**").hasRole("ADMIN").requestMatchers("/sales/**").hasRole("USER").anyRequest().authenticated()).addFilterBefore(jwtFilter, UsernamePasswordAuthenticationFilter.class);
+        .requestMatchers("/users/loginUser", "/users/registerUser","/error").permitAll().requestMatchers("/events/**", "/infrastructures/**").hasRole("ADMIN").requestMatchers("/sales/**").hasRole("USER").requestMatchers("/validates/**").hasRole("FUNCIONARIO").anyRequest().authenticated()).addFilterBefore(jwtFilter, UsernamePasswordAuthenticationFilter.class);
         return http.build();
     }
 

@@ -1,5 +1,6 @@
 package com.grupo7.ticket_system.transfers;
 
+import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Service;
 
 import com.grupo7.ticket_system.models.Ticket;
@@ -21,7 +22,8 @@ public class TransferService {
 
     public void transferTicket(int ticketId, String newOwnerUsername, String newOwnerEmail){
         if(userRepository.existsByMail(newOwnerEmail) &&  saleRepository.ticketCanBeTransfered(ticketId)){
-            transferRepository.saveTransfer(ticketId, userRepository.getUserIdByUsername(newOwnerUsername));
+            transferRepository.saveTransfer(ticketId, userRepository.getUserIdByUsername(newOwnerUsername),
+                                            userRepository.getUserIdByUsername(SecurityContextHolder.getContext().getAuthentication().getName()));
         }else{
             throw new IllegalArgumentException("This user doesn't exist or the ticket already was transfer 3 times");
         }

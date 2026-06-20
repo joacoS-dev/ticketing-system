@@ -36,6 +36,15 @@ public class SaleRepository {
 
     public boolean ticketCanBeTransfered(int idTicket){
         String sqltogettransfersnum= "SELECT cantidad_transferencias_realizadas FROM entrada WHERE id_entrada=?";
-        return template.queryForObject(sqltogettransfersnum, int.class, idTicket) < 3;
+        int transfersNum= template.queryForObject(sqltogettransfersnum, int.class, idTicket);
+
+        String sqltogetdeviceId= "SELECT id_dispositivo FROM entrada WHERE id_entrada= ?";
+        Integer deviceExists= template.queryForObject(sqltogetdeviceId, Integer.class, idTicket);
+
+        if(transfersNum <3 && deviceExists == null){
+            return true;
+        }else{
+            return false;
+        }
     }
 }
