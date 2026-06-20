@@ -21,4 +21,9 @@ public class ValidateController {
     public void validateTicket(@PathVariable int deviceId, @PathVariable int ticketId) {
        validateService.validateTicket(deviceId, ticketId);
     }
+
+    @PostMapping("{ticketId}/regenerateQr")
+    public void regenerateTicketQr(@RequestBody int ticketId) {    
+        validateService.regenerateQr(ticketId);
+    }
 }

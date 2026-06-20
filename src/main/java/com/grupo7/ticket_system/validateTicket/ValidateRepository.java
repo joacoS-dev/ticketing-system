@@ -16,6 +16,11 @@ public class ValidateRepository {
     public void saveValidation(int deviceId, int ticketId){
         String sqltovalidateTicket= "UPDATE entrada SET id_dispositivo= ? WHERE id_entrada= ?";
         template.update(sqltovalidateTicket,deviceId, ticketId);
+    }
 
+    //save new String in ticket qr
+    public void regenerateQr(String newQr, int ticketId){
+        String sqltoregenerateQr= "UPDATE entrada SET qr_entrada=? WHERE id_entrada=?";
+        template.update(sqltoregenerateQr,newQr,ticketId);
     }
 }
