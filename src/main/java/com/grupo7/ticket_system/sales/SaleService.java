@@ -22,22 +22,23 @@ public class SaleService {
         this.userRepository= userRepository;
     }
 
-    public Sale createSale(int eventId, RequestSale requestSale){ 
-        Sale savedSale= requestSale.getSale();
-        savedSale.setSaleDate(LocalDateTime.now());
-        savedSale.setUserId(userRepository.getUserIdByUsername(SecurityContextHolder.getContext().getAuthentication().getName()));
-        saleRepository.saveSale(savedSale);
-        if(requestSale.getTickets().size() <= 5){
-            for(Ticket ticket:requestSale.getTickets()){
-                ticket.setSaleId(savedSale.getSaleId()); 
-                ticket.setUserId(savedSale.getUserId());
-                ticket.setQrToken(UUID.randomUUID().toString());
-                ticket.setEventId(eventId);
-            }
-            saleRepository.saveTicket(requestSale.getTickets()); 
-        }else{
-            throw new IllegalArgumentException("You can buy at most 5 tickets per purchase");
+    public Sale createSale(int eventId, RequestSale requestSale) {
+        if (requestSale.getTickets() == null || requestSale.getTickets().isEmpty() || requestSale.getTickets().size() > 5) {
+            throw new IllegalArgumentException("The sale must contain at least one ticket and at most 5 tickets");
         }
+        Sale savedSale = requestSale.getSale();
+        savedSale.setSaleDate(LocalDateTime.now());
+        savedSale.setUserId(userRepository.getUserIdByUsername(
+                SecurityContextHolder.getContext().getAuthentication().getName()
+        ));
+        saleRepository.saveSale(savedSale);
+        for (Ticket ticket:requestSale.getTickets()) {
+            ticket.setSaleId(savedSale.getSaleId());
+            ticket.setUserId(savedSale.getUserId());
+            ticket.setQrToken(UUID.randomUUID().toString());
+            ticket.setEventId(eventId);
+        }
+        saleRepository.saveTicket(requestSale.getTickets());
         return savedSale;
     }
 }
