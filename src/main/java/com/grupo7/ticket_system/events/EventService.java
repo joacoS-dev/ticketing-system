@@ -20,4 +20,12 @@ public class EventService {
              throw new IllegalArgumentException("An event already exists in the stadium at this time");
         }
     }
+
+    public List<Map<String, Object>> getAllEvents() {
+        return eventRepository.findAllEvents();
+    }
+
+    public List<Map<String, Object>> getMostSoldEvents() {
+        return eventRepository.findMostSoldEvents();
+    }
 }

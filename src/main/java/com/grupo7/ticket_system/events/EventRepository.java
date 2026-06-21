@@ -27,4 +27,34 @@ public class EventRepository {
         String sqltofindbystadiumanddatetime= "SELECT COUNT(*) FROM evento WHERE id_estadio = ? AND fecha_evento BETWEEN DATE_SUB(?, INTERVAL 3 HOUR) AND DATE_ADD(?, INTERVAL 3 HOUR)";
         return template.queryForObject(sqltofindbystadiumanddatetime, int.class, event.getStadiumId(), event.getEventDate(),event.getEventDate()) >0;
     }
+
+       public List<Map<String, Object>> findAllEvents() {
+        String sql = """
+            SELECT ev.id_evento,
+                   ev.fecha_evento,
+                   es.nombre_estadio,
+                   ev.id_equipo_local,
+                   ev.id_equipo_visitante
+            FROM evento ev
+            JOIN estadio es ON es.id_estadio = ev.id_estadio
+            ORDER BY ev.fecha_evento DESC
+            """;
+        return template.queryForList(sql);
+    }
+
+    public List<Map<String, Object>> findMostSoldEvents() {
+        String sql = """
+            SELECT ev.id_evento,
+                   ev.fecha_evento,
+                   es.nombre_estadio,
+                   COUNT(en.id_entrada) AS entradas_vendidas
+            FROM evento ev
+            JOIN estadio es ON es.id_estadio = ev.id_estadio
+            LEFT JOIN entrada en ON en.id_evento = ev.id_evento
+            GROUP BY ev.id_evento, ev.fecha_evento, es.nombre_estadio
+            ORDER BY entradas_vendidas DESC, ev.fecha_evento DESC
+            LIMIT 10
+            """;
+        return template.queryForList(sql);
+    }
 }

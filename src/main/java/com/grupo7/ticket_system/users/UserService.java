@@ -33,4 +33,28 @@ public class UserService implements UserDetailsService{
     public UserDetails loadUserByUsername(String username) throws UsernameNotFoundException {
         return userRepository.getUserByUsername(username);
     }
+
+    public List<Map<String, Object>> getMyTickets() {
+        int userId = getLoggedUserId();
+        return userRepository.findTicketsByUserId(userId);
+    }
+
+    public List<Map<String, Object>> getMySales() {
+        int userId = getLoggedUserId();
+        return userRepository.findSalesByUserId(userId);
+    }
+
+    public List<Map<String, Object>> getMyTransfers() {
+        int userId = getLoggedUserId();
+        return userRepository.findTransfersByUserId(userId);
+    }
+
+    public List<Map<String, Object>> getTopBuyers() {
+        return userRepository.findTopBuyers();
+    }
+
+    private int getLoggedUserId() {
+        String username = SecurityContextHolder.getContext().getAuthentication().getName();
+        return userRepository.getUserIdByUsername(username);
+    }
 }

@@ -42,4 +42,24 @@ public class UserController{
         String token= jwtService.generateToken(loginRequest.username());
         return ResponseEntity.ok(Map.of("token", token));
     }
+
+    @GetMapping("/me/tickets")
+    public List<Map<String, Object>> getMyTickets() {
+        return userService.getMyTickets();
+    }
+
+    @GetMapping("/me/sales")
+    public List<Map<String, Object>> getMySales() {
+        return userService.getMySales();
+    }
+
+    @GetMapping("/me/transfers")
+    public List<Map<String, Object>> getMyTransfers() {
+        return userService.getMyTransfers();
+    }
+
+    @GetMapping("/rankings/top-buyers")
+    public List<Map<String, Object>> getTopBuyers() {
+        return userService.getTopBuyers();
+    }
 }

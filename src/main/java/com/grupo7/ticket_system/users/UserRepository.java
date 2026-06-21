@@ -63,4 +63,74 @@ public class UserRepository {
         String sqltofinduserid= "SELECT id_usuario FROM usuario WHERE nombre_usuario= ?";
         return template.queryForObject(sqltofinduserid, int.class,username);
     }
+
+    public List<Map<String, Object>> findTicketsByUserId(int userId) {
+        String sql = """
+            SELECT e.id_entrada,
+                   e.id_evento,
+                   ev.fecha_evento,
+                   es.nombre_estadio,
+                   s.letra_sector,
+                   e.qr_entrada,
+                   e.cantidad_transferencias_realizadas,
+                   e.id_dispositivo
+            FROM entrada e
+            JOIN evento ev ON ev.id_evento = e.id_evento
+            JOIN estadio es ON es.id_estadio = e.id_estadio
+            LEFT JOIN sector s ON s.id_sector = e.id_sector
+            WHERE e.id_usuario = ?
+            ORDER BY ev.fecha_evento DESC, e.id_entrada DESC
+            """;
+        return template.queryForList(sql, userId);
+    }
+
+    public List<Map<String, Object>> findSalesByUserId(int userId) {
+        String sql = """
+            SELECT v.id_venta,
+                   v.fecha_venta,
+                   v.estado,
+                   v.monto_total,
+                   v.porcentaje_comision_aplicado,
+                   COUNT(e.id_entrada) AS cantidad_entradas
+            FROM venta v
+            LEFT JOIN entrada e ON e.id_venta = v.id_venta
+            WHERE v.id_usuario = ?
+            GROUP BY v.id_venta, v.fecha_venta, v.estado, v.monto_total, v.porcentaje_comision_aplicado
+            ORDER BY v.fecha_venta DESC
+            """;
+        return template.queryForList(sql, userId);
+    }
+
+    public List<Map<String, Object>> findTransfersByUserId(int userId) {
+        String sql = """
+            SELECT t.fecha_transferencia,
+                   t.estado_transferencia,
+                   t.id_entrada,
+                   envia.nombre_usuario AS usuario_envia,
+                   recibe.nombre_usuario AS usuario_recibe
+            FROM transferencia t
+            JOIN usuario envia ON envia.id_usuario = t.id_usuario_envia
+            JOIN usuario recibe ON recibe.id_usuario = t.id_usuario_recibe
+            WHERE t.id_usuario_envia = ? OR t.id_usuario_recibe = ?
+            ORDER BY t.fecha_transferencia DESC
+            """;
+        return template.queryForList(sql, userId, userId);
+    }
+
+    public List<Map<String, Object>> findTopBuyers() {
+        String sql = """
+            SELECT u.id_usuario,
+                   u.nombre_usuario,
+                   u.mail,
+                   COUNT(DISTINCT v.id_venta) AS cantidad_compras,
+                   COUNT(e.id_entrada) AS cantidad_entradas
+            FROM usuario u
+            JOIN venta v ON v.id_usuario = u.id_usuario
+            LEFT JOIN entrada e ON e.id_venta = v.id_venta
+            GROUP BY u.id_usuario, u.nombre_usuario, u.mail
+            ORDER BY cantidad_entradas DESC, cantidad_compras DESC
+            LIMIT 10
+            """;
+        return template.queryForList(sql);
+    }
 }

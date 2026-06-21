@@ -20,4 +20,14 @@ public class EventController {
     public Event createEvent(@RequestBody Event event) {
         return eventService.createEvent(event);
     }
+
+    @GetMapping("/list")
+    public List<Map<String, Object>> getAllEvents() {
+        return eventService.getAllEvents();
+    }
+
+    @GetMapping("/rankings/most-sold")
+    public List<Map<String, Object>> getMostSoldEvents() {
+        return eventService.getMostSoldEvents();
+    }
 }
