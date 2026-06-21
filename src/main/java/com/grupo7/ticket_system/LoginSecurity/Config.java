@@ -32,13 +32,35 @@ public class Config {
 
     @Bean
     public SecurityFilterChain filterChain(HttpSecurity http) throws Exception {
-        http.cors(cors -> cors.configure(http)).csrf(csrf -> csrf.disable()).sessionManagement(session -> session.sessionCreationPolicy(SessionCreationPolicy.STATELESS)).authorizeHttpRequests(auth -> auth
-        .requestMatchers("/users/loginUser", "/users/registerUser","/error").permitAll().requestMatchers("/events/**", "/infrastructures/**").hasRole("ADMIN").requestMatchers("/sales/**").hasRole("USER").requestMatchers("/validates/**").hasRole("FUNCIONARIO").anyRequest().authenticated()).addFilterBefore(jwtFilter, UsernamePasswordAuthenticationFilter.class);
-        return http.build();
+        http
+            .csrf(csrf -> csrf.disable())
+            .sessionManagement(session -> session.sessionCreationPolicy(SessionCreationPolicy.STATELESS))
+            .authorizeHttpRequests(auth -> auth
+                // Frontend estatico
+                .requestMatchers("/", "/index.html", "/styles.css", "/app.js", "/favicon.ico", "/error").permitAll()
+
+                // Login y registro publicos
+                .requestMatchers("/users/loginUser", "/users/registerUser").permitAll() //
+
+                // Consultas/rankings agregadas para la demo
+                .requestMatchers("/users/rankings/**").hasRole("ADMIN")
+                .requestMatchers("/events/rankings/**", "/events/list").authenticated()
+
+                // Operaciones segun rol
+                .requestMatchers("/events/**", "/infrastructures/**").hasRole("ADMIN") //
+                .requestMatchers("/sales/**", "/transfers/**").hasRole("USER") //
+                .requestMatchers("/validates/**").hasRole("FUNCIONARIO") //
+
+                // El resto requiere estar logueado
+                .anyRequest().authenticated() //
+            )
+            .addFilterBefore(jwtFilter, UsernamePasswordAuthenticationFilter.class); //
+
+        return http.build(); //
     }
 
     @Bean
-    public AuthenticationManager authManager(AuthenticationConfiguration config) throws Exception { //http request config declaration.
+    public AuthenticationManager authManager(AuthenticationConfiguration config) throws Exception {
         return config.getAuthenticationManager();
     }
 }
