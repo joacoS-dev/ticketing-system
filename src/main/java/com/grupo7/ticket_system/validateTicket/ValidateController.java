@@ -10,7 +10,7 @@ import org.springframework.web.bind.annotation.RequestBody;
 @RestController
 @RequestMapping("/validates")
 public class ValidateController {
-    
+
     private final ValidateService validateService;
 
     ValidateController(ValidateService validateService){
@@ -18,12 +18,12 @@ public class ValidateController {
     }
 
     @PostMapping("{deviceId}/{ticketId}/validateTicket")
-    public void validateTicket(@PathVariable int deviceId, @PathVariable int ticketId) {
-       validateService.validateTicket(deviceId, ticketId);
+    public void validateTicket(@PathVariable int deviceId, @PathVariable int ticketId){
+        validateService.validateTicket(deviceId, ticketId);
     }
 
     @PostMapping("{ticketId}/regenerateQr")
-    public void regenerateTicketQr(@RequestBody int ticketId) {    
+    public void regenerateTicketQr(@PathVariable int ticketId){ // El endpoint ya tenia el ticketId en la ruta, pero el metodo lo estaba esperando en el body. Es @PathVariable para que tome correctamente el ID desde /validates/{ticketId}/regenerateQr
         validateService.regenerateQr(ticketId);
     }
 }
