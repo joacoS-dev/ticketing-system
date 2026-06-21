@@ -45,9 +45,9 @@ public class UserRepository {
     }
 
     //check if the email exists in database
-    public boolean existsByMail(String mail){
-        String sqltofindbyemail= "SELECT COUNT(*) FROM usuario JOIN usuario_general ON usuario.id_usuario=usuario_general.id_usuario WHERE usuario.mail=?";
-        return template.queryForObject(sqltofindbyemail, int.class, mail) >0;
+    public boolean existsByMail(String mail) {
+        String sqltofindbyemail = "SELECT COUNT(*) FROM usuario WHERE mail=?"; //Consulta directamente la tabla usuario porque el mail tiene que ser unico a nivel usuario sin importar el rol
+        return template.queryForObject(sqltofindbyemail, int.class, mail) > 0;
     }
 
     //get object user by string username
