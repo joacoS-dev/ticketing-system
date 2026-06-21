@@ -7,6 +7,9 @@ import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 import com.grupo7.ticket_system.models.User;
 import com.grupo7.ticket_system.models.User;
+import java.util.List;
+import java.util.Map;
+import org.springframework.security.core.context.SecurityContextHolder;
 
 @Service
 public class UserService implements UserDetailsService{

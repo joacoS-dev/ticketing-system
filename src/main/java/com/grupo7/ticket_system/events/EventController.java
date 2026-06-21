@@ -5,6 +5,9 @@ import org.springframework.web.bind.annotation.RestController;
 import com.grupo7.ticket_system.models.Event;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
+import java.util.List;
+import java.util.Map;
+import org.springframework.web.bind.annotation.GetMapping;
 
 @RestController
 @RequestMapping("/events")

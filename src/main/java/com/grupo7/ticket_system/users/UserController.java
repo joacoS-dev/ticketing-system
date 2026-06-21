@@ -14,6 +14,9 @@ import org.springframework.web.bind.annotation.RestController;
 
 import com.grupo7.ticket_system.LoginSecurity.JwtService;
 import com.grupo7.ticket_system.models.User;
+import java.util.List;
+import java.util.Map;
+import org.springframework.web.bind.annotation.GetMapping;
 
 @RestController
 @RequestMapping("/users")
