@@ -38,8 +38,10 @@ public class UserRepository {
         template.update(sqltosaveuseasgeneraluser, user.getUserId(), LocalDateTime.now(), true);
         //save user phones
         String sqltosavephones= "INSERT INTO telefono(numero_telefono, id_usuario) VALUES (?,?)";
-        for(String phone: user.getPhones()){
-            template.update(sqltosavephones,phone,user.getUserId());
+        if (user.getPhones() != null) {
+            for (String phone: user.getPhones()) {
+                template.update(sqltosavephones, phone, user.getUserId());
+            }
         }
         return user;
     }
