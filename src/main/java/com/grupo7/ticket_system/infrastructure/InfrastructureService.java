@@ -16,8 +16,8 @@ public class InfrastructureService {
     }
 
     public Section createSection(Section section, int stadiumId){ 
+        section.setStadiumId(stadiumId);
         if(!infrastructureRepository.existsByStadiumAndLetter(section)){
-            section.setStadiumId(stadiumId);
             return infrastructureRepository.saveSection(section);
         }else{
             throw new IllegalArgumentException("Section already created in the stadium");
@@ -25,8 +25,9 @@ public class InfrastructureService {
     }
 
     public List<Stadium> getAllStadiums(){
-        if(infrastructureRepository.getAllStadiums() != null){
-            return infrastructureRepository.getAllStadiums();
+        List<Stadium> stadiums = infrastructureRepository.getAllStadiums();
+        if(stadiums != null && !stadiums.isEmpty()){
+            return stadiums;
         }else{
             throw new IllegalArgumentException("No stadiums registered");
         }
