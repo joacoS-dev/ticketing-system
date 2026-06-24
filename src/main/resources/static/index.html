@@ -1,0 +1,248 @@
+<!doctype html>
+<html lang="es">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Ticketing Mundial 2026</title>
+  <link rel="stylesheet" href="styles.css">
+</head>
+<body>
+  <h1>Ticketing Mundial 2026</h1>
+  <p>Proyecto de: Joaquin Scaroni, Anthony Pereira, Fabio Luzzatto </p>
+
+  <div class="box">
+    <strong>Estado:</strong> <span id="estadoSesion">Sin sesión</span>
+    <button id="logoutBtn" type="button">Cerrar sesión</button>
+  </div>
+
+  <div id="mensaje"></div>
+
+  <h2>1. Login</h2>
+  <form id="loginForm" class="box">
+    <label>Usuario</label>
+    <input name="username" required>
+
+    <label>Contraseña</label>
+    <input name="password" type="password" required>
+
+    <button type="submit">Iniciar sesión</button>
+  </form>
+  <div class="section-output">
+    <strong>Respuesta del backend</strong>
+    <pre id="salidaLogin">Todavía no hay respuesta.</pre>
+  </div>
+
+  <h2>2. Registro</h2>
+  <form id="registerForm" class="box">
+    <label>Usuario</label>
+    <input name="username" required>
+
+    <label>Contraseña</label>
+    <input name="password" type="password" required>
+
+    <label>Rol</label>
+    <select name="rol">
+      <option value="USER">USER</option>
+      <option value="ADMIN">ADMIN</option>
+      <option value="FUNCIONARIO">FUNCIONARIO</option>
+    </select>
+
+    <label>Email</label>
+    <input name="email" type="email" required>
+
+    <label>País documento</label>
+    <input name="documentCountry" value="Uruguay" required>
+
+    <label>Tipo documento</label>
+    <input name="documentType" value="CI" required>
+
+    <label>Número documento</label>
+    <input name="documentNumber" required>
+
+    <label>Calle</label>
+    <input name="streetAddress" required>
+
+    <label>Número de puerta</label>
+    <input name="numberAddress" required>
+
+    <label>Código postal</label>
+    <select id="postalCodeSelect" name="postalCode" required>
+      <option value="">Cargando códigos postales...</option>
+    </select>
+
+    <label>Teléfonos separados por coma</label>
+    <input name="phones" placeholder="099111222,098333444">
+
+    <button type="submit">Registrar</button>
+  </form>
+  <div class="section-output">
+    <strong>Respuesta del backend</strong>
+    <pre id="salidaRegistro">Todavía no hay respuesta.</pre>
+  </div>
+
+  <h2>3. Consultas</h2>
+  <div class="box botones">
+    <button data-get="/events/list" data-auth="true" type="button">Listar eventos</button>
+    <button data-get="/infrastructures/getAllStadiums" data-roles="ADMIN" type="button">Listar estadios</button>
+    <button data-get="/users/me/tickets" data-roles="USER" type="button">Mis entradas</button>
+    <button data-get="/users/me/sales" data-roles="USER" type="button">Mis compras</button>
+    <button data-get="/users/me/transfers" data-roles="USER" type="button">Mis transferencias</button>
+    <button data-get="/events/rankings/most-sold" data-auth="true" type="button">Eventos más vendidos</button>
+    <button data-get="/users/rankings/top-buyers" data-roles="ADMIN" type="button">Ranking compradores</button>
+
+    <label>Sectores de estadio</label>
+    <select id="querySectionStadiumSelect" data-roles="ADMIN">
+      <option value="">Iniciá sesión como ADMIN para cargar estadios</option>
+    </select>
+    <button id="listSectionsBtn" data-roles="ADMIN" type="button">Listar sectores</button>
+  </div>
+  <div class="section-output">
+    <strong>Respuesta del backend</strong>
+    <pre id="salidaConsultas">Todavía no hay respuesta.</pre>
+  </div>
+
+  <h2>4. Comprar entradas</h2>
+  <form id="saleForm" class="box" data-roles="USER">
+    <p>Rol necesario: USER. La cantidad máxima es 5.</p>
+
+    <label>Evento</label>
+    <select id="saleEventSelect" name="eventId" required>
+      <option value="">Iniciá sesión como USER para cargar eventos</option>
+    </select>
+
+    <label>Estadio</label>
+    <select id="saleStadiumSelect" name="stadiumId" required disabled>
+      <option value="">Elegí un evento</option>
+    </select>
+
+    <label>Sector</label>
+    <select id="saleSectionSelect" name="sectionId" required>
+      <option value="">Elegí un estadio</option>
+    </select>
+
+    <label>Cantidad de entradas</label>
+    <input name="quantity" type="number" min="1" max="5" value="1" required>
+
+    <button type="submit">Crear venta</button>
+  </form>
+  <div class="section-output">
+    <strong>Respuesta del backend</strong>
+    <pre id="salidaCompra">Todavía no hay respuesta.</pre>
+  </div>
+
+  <h2>5. Transferir entrada</h2>
+  <form id="transferForm" class="box" data-roles="USER">
+    <p>Rol necesario: USER.</p>
+
+    <label>ID entrada</label>
+    <input name="ticketId" type="number" required>
+
+    <label>Usuario destinatario</label>
+    <input name="newOwnerUsername" required>
+
+    <label>Email destinatario</label>
+    <input name="newOwnerEmail" type="email" required>
+
+    <button type="submit">Transferir</button>
+  </form>
+  <div class="section-output">
+    <strong>Respuesta del backend</strong>
+    <pre id="salidaTransferencia">Todavía no hay respuesta.</pre>
+  </div>
+
+  <h2>6. Admin: crear evento</h2>
+  <form id="eventForm" class="box" data-roles="ADMIN">
+    <p>Rol necesario: ADMIN.</p>
+
+    <label>Fecha y hora</label>
+    <input name="eventDate" type="datetime-local" required>
+
+    <label>Estadio</label>
+    <select id="eventStadiumSelect" name="stadiumId" required>
+      <option value="">Iniciá sesión como ADMIN para cargar estadios</option>
+    </select>
+
+    <label>Equipo local</label>
+    <select id="localTeamSelect" name="localTeamId" required>
+      <option value="">Iniciá sesión como ADMIN para cargar equipos</option>
+    </select>
+
+    <label>Equipo visitante</label>
+    <select id="visitorTeamSelect" name="visitorTeamId" required>
+      <option value="">Iniciá sesión como ADMIN para cargar equipos</option>
+    </select>
+
+    <button type="submit">Crear evento</button>
+  </form>
+  <div class="section-output">
+    <strong>Respuesta del backend</strong>
+    <pre id="salidaEvento">Todavía no hay respuesta.</pre>
+  </div>
+
+  <h2>7. Admin: crear sector</h2>
+  <form id="sectionForm" class="box" data-roles="ADMIN">
+    <p>Rol necesario: ADMIN.</p>
+
+    <label>Estadio</label>
+    <select id="sectionStadiumSelect" name="stadiumId" required>
+      <option value="">Iniciá sesión como ADMIN para cargar estadios</option>
+    </select>
+
+    <label>Letra sector</label>
+    <select id="sectionLetterSelect" name="sectionLetter" required>
+      <option value="">Elegí un estadio</option>
+    </select>
+
+    <label>Capacidad máxima</label>
+    <input name="maxCapacity" type="number" min="1" step="1" required>
+
+    <label>Precio</label>
+    <input name="price" type="number" min="0" step="1" required>
+
+    <button type="submit">Crear sector</button>
+  </form>
+  <div class="section-output">
+    <strong>Respuesta del backend</strong>
+    <pre id="salidaSector">Todavía no hay respuesta.</pre>
+  </div>
+
+  <h2>8. Funcionario: validar entrada</h2>
+  <form id="validateForm" class="box" data-roles="FUNCIONARIO">
+    <p>Rol necesario: FUNCIONARIO.</p>
+
+    <label>Dispositivo</label>
+    <select id="validateDeviceSelect" name="deviceId" required>
+      <option value="">Iniciá sesión como FUNCIONARIO para cargar dispositivos</option>
+    </select>
+
+    <label>Entrada pendiente</label>
+    <select id="validateTicketSelect" name="ticketId" required>
+      <option value="">Iniciá sesión como FUNCIONARIO para cargar entradas</option>
+    </select>
+
+    <button type="submit">Validar entrada</button>
+  </form>
+  <div class="section-output">
+    <strong>Respuesta del backend</strong>
+    <pre id="salidaValidacion">Todavía no hay respuesta.</pre>
+  </div>
+
+  <h2>9. Funcionario: regenerar QR</h2>
+  <form id="qrForm" class="box" data-roles="FUNCIONARIO">
+    <p>Rol necesario: FUNCIONARIO.</p>
+
+    <label>Entrada</label>
+    <select id="qrTicketSelect" name="ticketId" required>
+      <option value="">Iniciá sesión como FUNCIONARIO para cargar entradas</option>
+    </select>
+
+    <button type="submit">Regenerar QR</button>
+  </form>
+  <div class="section-output">
+    <strong>Respuesta del backend</strong>
+    <pre id="salidaQr">Todavía no hay respuesta.</pre>
+  </div>
+
+  <script src="app.js"></script>
+</body>
+</html>

@@ -1,10 +1,13 @@
 package com.grupo7.ticket_system.validateTicket;
 
+import java.util.List;
+import java.util.Map;
+
+import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestBody;
 
 
 @RestController
@@ -25,5 +28,20 @@ public class ValidateController {
     @PostMapping("{ticketId}/regenerateQr")
     public void regenerateTicketQr(@PathVariable int ticketId){ // El endpoint ya tenia el ticketId en la ruta, pero el metodo lo estaba esperando en el body. Es @PathVariable para que tome correctamente el ID desde /validates/{ticketId}/regenerateQr
         validateService.regenerateQr(ticketId);
+    }
+
+    @GetMapping("/devices")
+    public List<Map<String, Object>> getDevices() {
+        return validateService.getDevices();
+    }
+
+    @GetMapping("/tickets/pending")
+    public List<Map<String, Object>> getTicketsPendingValidation() {
+        return validateService.getTicketsPendingValidation();
+    }
+
+    @GetMapping("/tickets")
+    public List<Map<String, Object>> getTicketsForQrRegeneration() {
+        return validateService.getTicketsForQrRegeneration();
     }
 }

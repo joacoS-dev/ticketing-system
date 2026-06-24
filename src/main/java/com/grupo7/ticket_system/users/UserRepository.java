@@ -1,6 +1,5 @@
 package com.grupo7.ticket_system.users;
 import java.time.LocalDateTime;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.dao.EmptyResultDataAccessException;
 import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.security.core.userdetails.UserDetails;
@@ -22,10 +21,10 @@ public class UserRepository {
         //get postal code
         String sqltogetpostalcodeid= "SELECT id_codigo_postal FROM codigo_postal_direccion WHERE codigo_postal = ?";
         try {
-            int postalCodeId = template.queryForObject(sqltogetpostalcodeid, int.class,user.getPostalCode());
+            int postalCodeId = template.queryForObject(sqltogetpostalcodeid, int.class, user.getPostalCode());
             user.setPostalCodeId(postalCodeId);
         } catch (EmptyResultDataAccessException e) {
-            throw new IllegalArgumentException("Invalid postal code");
+            throw new IllegalArgumentException("Codigo postal invalido: debe existir en la base de datos");
         }
         //save user
         String sqltosaveuser= "INSERT INTO usuario (nombre_usuario,contrasena,rol,mail,pais_documento,tipo_documento,numero_documento,calle_direccion,numero_direccion, id_codigo_postal) VALUES (?,?,?,?,?,?,?,?,?,?)";
@@ -53,6 +52,11 @@ public class UserRepository {
         return template.queryForObject(sqltofindbyemail, int.class, mail) > 0;
     }
 
+    public List<String> findAllPostalCodes() {
+        String sql = "SELECT codigo_postal FROM codigo_postal_direccion ORDER BY codigo_postal";
+        return template.queryForList(sql, String.class);
+    }
+
     //get object user by string username
     public UserDetails getUserByUsername(String username){
         String sqltogetuserbyusername= "SELECT nombre_usuario, contrasena, rol FROM usuario WHERE nombre_usuario= ?";
@@ -63,6 +67,11 @@ public class UserRepository {
     public int getUserIdByUsername(String username){
         String sqltofinduserid= "SELECT id_usuario FROM usuario WHERE nombre_usuario= ?";
         return template.queryForObject(sqltofinduserid, int.class,username);
+    }
+
+    public String getRoleByUsername(String username) {
+        String sqltofindrole= "SELECT rol FROM usuario WHERE nombre_usuario= ?";
+        return template.queryForObject(sqltofindrole, String.class, username);
     }
 
     public List<Map<String, Object>> findTicketsByUserId(int userId) {

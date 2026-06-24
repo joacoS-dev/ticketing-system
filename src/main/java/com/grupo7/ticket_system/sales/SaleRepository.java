@@ -1,7 +1,8 @@
 package com.grupo7.ticket_system.sales;
 import java.time.LocalDateTime;
 import java.util.List;
-import org.springframework.beans.factory.annotation.Autowired;
+import java.util.Map;
+import org.springframework.dao.EmptyResultDataAccessException;
 import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.stereotype.Repository;
 import com.grupo7.ticket_system.models.Sale;
@@ -32,6 +33,50 @@ public class SaleRepository {
             template.update(sqltosaveticket, ticket.getTransfersMade(), ticket.getQrToken(),ticket.getSectionId(),ticket.getStadiumId(), ticket.getSaleId(), 
                             ticket.getEventId(), ticket.getUserId());
         }  
+    }
+
+    public List<Map<String, Object>> findEventsForSale() {
+        String sql = """
+            SELECT ev.id_evento,
+                   ev.fecha_evento,
+                   ev.id_estadio,
+                   es.nombre_estadio
+            FROM evento ev
+            JOIN estadio es ON es.id_estadio = ev.id_estadio
+            ORDER BY ev.fecha_evento DESC
+            """;
+        return template.queryForList(sql);
+    }
+
+    public List<Map<String, Object>> findSectionsByStadiumId(int stadiumId) {
+        String sql = """
+            SELECT id_sector,
+                   letra_sector,
+                   costo,
+                   capacidad_maxima
+            FROM sector
+            WHERE id_estadio = ?
+            ORDER BY letra_sector
+            """;
+        return template.queryForList(sql, stadiumId);
+    }
+
+    public int findStadiumIdByEventId(int eventId) {
+        String sql = "SELECT id_estadio FROM evento WHERE id_evento = ?";
+        try {
+            return template.queryForObject(sql, int.class, eventId);
+        } catch (EmptyResultDataAccessException e) {
+            throw new IllegalArgumentException("Evento invalido");
+        }
+    }
+
+    public int findSectionPrice(String sectionId, int stadiumId) {
+        String sql = "SELECT costo FROM sector WHERE id_sector = ? AND id_estadio = ?";
+        try {
+            return template.queryForObject(sql, int.class, sectionId, stadiumId);
+        } catch (EmptyResultDataAccessException e) {
+            throw new IllegalArgumentException("Sector invalido para el estadio seleccionado");
+        }
     }
 
     public boolean ticketCanBeTransfered(int idTicket){

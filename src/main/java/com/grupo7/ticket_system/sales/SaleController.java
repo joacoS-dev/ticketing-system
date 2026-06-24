@@ -1,10 +1,13 @@
 package com.grupo7.ticket_system.sales;
+import java.util.List;
+import java.util.Map;
+
+import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 import com.grupo7.ticket_system.models.RequestSale;
 import com.grupo7.ticket_system.models.Sale;
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 
@@ -22,6 +25,15 @@ public class SaleController {
     public Sale createSale(@PathVariable int eventId, @RequestBody RequestSale requestSale){
         return saleService.createSale(eventId, requestSale);
     }
-}
 
+    @GetMapping("/events")
+    public List<Map<String, Object>> getEventsForSale() {
+        return saleService.getEventsForSale();
+    }
+
+    @GetMapping("/stadiums/{stadiumId}/sections")
+    public List<Map<String, Object>> getSectionsByStadiumId(@PathVariable int stadiumId) {
+        return saleService.getSectionsByStadiumId(stadiumId);
+    }
+}
 

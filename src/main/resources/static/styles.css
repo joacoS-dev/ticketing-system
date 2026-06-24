@@ -1,0 +1,84 @@
+body {
+  font-family: Arial, sans-serif;
+  margin: 24px;
+  background: #f4f4f4;
+  color: #222;
+}
+
+h1, h2 {
+  margin-bottom: 8px;
+}
+
+.box {
+  background: white;
+  border: 1px solid #ccc;
+  padding: 16px;
+  margin-bottom: 18px;
+}
+
+label {
+  display: block;
+  margin-top: 10px;
+  font-weight: bold;
+}
+
+input, select {
+  width: 100%;
+  max-width: 420px;
+  padding: 8px;
+  margin-top: 4px;
+  box-sizing: border-box;
+}
+
+button {
+  margin-top: 12px;
+  margin-right: 8px;
+  padding: 8px 12px;
+  cursor: pointer;
+}
+
+button:disabled,
+input:disabled,
+select:disabled {
+  cursor: not-allowed;
+  opacity: 0.55;
+}
+
+.botones button {
+  display: inline-block;
+}
+
+.section-output {
+  margin-top: -8px;
+  margin-bottom: 18px;
+}
+
+.section-output strong {
+  display: block;
+  margin-bottom: 6px;
+}
+
+#mensaje {
+  margin: 16px 0;
+  padding: 12px;
+  border: 1px solid #ccc;
+  background: white;
+}
+
+#mensaje.ok {
+  border-color: green;
+  color: green;
+}
+
+#mensaje.error {
+  border-color: red;
+  color: red;
+}
+
+pre {
+  background: #111;
+  color: #eee;
+  padding: 16px;
+  overflow: auto;
+  white-space: pre-wrap;
+}

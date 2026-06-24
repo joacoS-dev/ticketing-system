@@ -1,5 +1,4 @@
 package com.grupo7.ticket_system.events;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 import com.grupo7.ticket_system.models.Event;
@@ -32,5 +31,10 @@ public class EventController {
     @GetMapping("/rankings/most-sold")
     public List<Map<String, Object>> getMostSoldEvents() {
         return eventService.getMostSoldEvents();
+    }
+
+    @GetMapping("/teams")
+    public List<Map<String, Object>> getAllTeams() {
+        return eventService.getAllTeams();
     }
 }

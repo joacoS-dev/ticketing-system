@@ -1,12 +1,12 @@
 package com.grupo7.ticket_system.users;
-import java.net.Authenticator;
+
+import java.util.List;
 import java.util.Map;
-import org.apache.tomcat.util.descriptor.web.LoginConfig;
-import org.apache.tomcat.util.net.openssl.ciphers.Authentication;
-import org.springframework.beans.factory.annotation.Autowired;
+
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
+import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -14,9 +14,6 @@ import org.springframework.web.bind.annotation.RestController;
 
 import com.grupo7.ticket_system.LoginSecurity.JwtService;
 import com.grupo7.ticket_system.models.User;
-import java.util.List;
-import java.util.Map;
-import org.springframework.web.bind.annotation.GetMapping;
 
 @RestController
 @RequestMapping("/users")
@@ -43,7 +40,13 @@ public class UserController{
     public ResponseEntity<Map<String,String>> loginUser(@RequestBody LoginRequest loginRequest) {
         authenticationManager.authenticate(new UsernamePasswordAuthenticationToken(loginRequest.username(), loginRequest.password()));
         String token= jwtService.generateToken(loginRequest.username());
-        return ResponseEntity.ok(Map.of("token", token));
+        String role = userService.getRoleByUsername(loginRequest.username());
+        return ResponseEntity.ok(Map.of("token", token, "role", role));
+    }
+
+    @GetMapping("/postal-codes")
+    public List<String> getPostalCodes() {
+        return userService.getPostalCodes();
     }
 
     @GetMapping("/me/tickets")

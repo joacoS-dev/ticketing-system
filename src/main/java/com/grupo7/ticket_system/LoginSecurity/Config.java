@@ -40,7 +40,7 @@ public class Config {
                 .requestMatchers("/", "/index.html", "/styles.css", "/app.js", "/favicon.ico", "/error").permitAll()
 
                 // Login y registro publicos
-                .requestMatchers("/users/loginUser", "/users/registerUser").permitAll() //
+                .requestMatchers("/users/loginUser", "/users/registerUser", "/users/postal-codes").permitAll() //
 
                 // Consultas/rankings agregadas para la demo
                 .requestMatchers("/users/rankings/**").hasRole("ADMIN")

@@ -1,5 +1,4 @@
 package com.grupo7.ticket_system.events;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.stereotype.Repository;
 import com.grupo7.ticket_system.models.Event;
@@ -36,9 +35,13 @@ public class EventRepository {
                    ev.fecha_evento,
                    es.nombre_estadio,
                    ev.id_equipo_local,
-                   ev.id_equipo_visitante
+                   local.nombre_equipo AS equipo_local,
+                   ev.id_equipo_visitante,
+                   visitante.nombre_equipo AS equipo_visitante
             FROM evento ev
             JOIN estadio es ON es.id_estadio = ev.id_estadio
+            JOIN equipo local ON local.id_equipo = ev.id_equipo_local
+            JOIN equipo visitante ON visitante.id_equipo = ev.id_equipo_visitante
             ORDER BY ev.fecha_evento DESC
             """;
         return template.queryForList(sql);
@@ -56,6 +59,16 @@ public class EventRepository {
             GROUP BY ev.id_evento, ev.fecha_evento, es.nombre_estadio
             ORDER BY entradas_vendidas DESC, ev.fecha_evento DESC
             LIMIT 10
+            """;
+        return template.queryForList(sql);
+    }
+
+    public List<Map<String, Object>> findAllTeams() {
+        String sql = """
+            SELECT id_equipo,
+                   nombre_equipo
+            FROM equipo
+            ORDER BY nombre_equipo
             """;
         return template.queryForList(sql);
     }

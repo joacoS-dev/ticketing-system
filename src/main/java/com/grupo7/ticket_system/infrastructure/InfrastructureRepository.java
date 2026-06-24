@@ -1,10 +1,7 @@
 package com.grupo7.ticket_system.infrastructure;
-import java.util.ArrayList;
 import java.util.List;
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.jdbc.core.BeanPropertyRowMapper;
+import java.util.Map;
 import org.springframework.jdbc.core.JdbcTemplate;
-import org.springframework.jdbc.core.RowMapper;
 import org.springframework.stereotype.Repository;
 import com.grupo7.ticket_system.models.Section;
 import com.grupo7.ticket_system.models.Stadium;
@@ -44,5 +41,18 @@ public class InfrastructureRepository {
     public boolean existsByStadiumAndLetter(Section section){
         String sqltofindbystadiumandletter= "SELECT COUNT(*) FROM sector WHERE id_estadio= ? AND letra_sector= ?";
         return template.queryForObject(sqltofindbystadiumandletter, int.class,section.getStadiumId(), section.getSectionLetter()) > 0;
+    }
+
+    public List<Map<String, Object>> findSectionsByStadiumId(int stadiumId) {
+        String sql = """
+            SELECT id_sector,
+                   letra_sector,
+                   costo,
+                   capacidad_maxima
+            FROM sector
+            WHERE id_estadio = ?
+            ORDER BY letra_sector
+            """;
+        return template.queryForList(sql, stadiumId);
     }
 }
