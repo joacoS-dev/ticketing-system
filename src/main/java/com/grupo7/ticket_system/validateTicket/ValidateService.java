@@ -24,6 +24,10 @@ public class ValidateService {
         validateRepository.regenerateQr(newQr,ticketId);
     }
 
+    public void assignDeviceToFuncionario(int deviceId, int userId) {
+        validateRepository.assignDeviceToFuncionario(deviceId, userId);
+    }
+
     public List<Map<String, Object>> getDevices() {
         return validateRepository.findDevices();
     }
