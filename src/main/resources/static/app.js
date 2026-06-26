@@ -548,11 +548,13 @@ async function cargarOpcionesFuncionario() {
   const validateDeviceSelect = $("#validateDeviceSelect");
   const validateTicketSelect = $("#validateTicketSelect");
   const qrTicketSelect = $("#qrTicketSelect");
+  const assignDeviceSelect = $("#assignDeviceSelect");
 
   if (getRole() !== "FUNCIONARIO") {
     limpiarSelect(validateDeviceSelect, "Iniciá sesión como FUNCIONARIO para cargar dispositivos");
     limpiarSelect(validateTicketSelect, "Iniciá sesión como FUNCIONARIO para cargar entradas");
     limpiarSelect(qrTicketSelect, "Iniciá sesión como FUNCIONARIO para cargar entradas");
+    limpiarSelect(assignDeviceSelect, "Iniciá sesión como FUNCIONARIO para cargar dispositivos");
     return;
   }
 
@@ -560,15 +562,22 @@ async function cargarOpcionesFuncionario() {
     const dispositivos = await llamarApi("/validates/devices");
 
     limpiarSelect(validateDeviceSelect, "Elegí un dispositivo");
+    limpiarSelect(assignDeviceSelect, "Elegí un dispositivo");
     dispositivos.forEach((dispositivo) => {
-      validateDeviceSelect.append(new Option("Dispositivo #" + dispositivo.id_dispositivo, dispositivo.id_dispositivo));
+      const optionText = "Dispositivo #" + dispositivo.id_dispositivo;
+      validateDeviceSelect.append(new Option(optionText, dispositivo.id_dispositivo));
+      assignDeviceSelect.append(new Option(optionText, dispositivo.id_dispositivo));
     });
 
     if (validateDeviceSelect.options.length === 1) {
       limpiarSelect(validateDeviceSelect, "No hay dispositivos cargados");
     }
+    if (assignDeviceSelect.options.length === 1) {
+      limpiarSelect(assignDeviceSelect, "No hay dispositivos cargados");
+    }
   } catch (error) {
     limpiarSelect(validateDeviceSelect, "No se pudieron cargar dispositivos");
+    limpiarSelect(assignDeviceSelect, "No se pudieron cargar dispositivos");
     mostrarError(new Error("Error al cargar dispositivos: " + error.message), "salidaValidacion");
   }
 
@@ -636,6 +645,23 @@ $("#qrForm").addEventListener("submit", async (e) => {
     await cargarOpcionesFuncionario();
   } catch (error) {
     mostrarError(new Error("Error al regenerar QR: " + error.message), "salidaQr");
+  }
+});
+
+$("#assignDeviceForm").addEventListener("submit", async (e) => {
+  e.preventDefault();
+  const data = datosFormulario(e.target);
+
+  try {
+    const resultado = await llamarApi(`/validates/devices/${data.deviceId}/assign-funcionario/${data.userId}`, {
+      method: "POST"
+    });
+
+    mostrarMensaje("Dispositivo asignado correctamente.");
+    mostrarSalida(resultado, "salidaAssignDevice");
+    await cargarOpcionesFuncionario();
+  } catch (error) {
+    mostrarError(new Error("Error al asignar dispositivo: " + error.message), "salidaAssignDevice");
   }
 });
 
