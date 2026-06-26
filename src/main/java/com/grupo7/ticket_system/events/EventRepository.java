@@ -1,4 +1,5 @@
 package com.grupo7.ticket_system.events;
+import org.springframework.dao.DataIntegrityViolationException;
 import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.stereotype.Repository;
 import com.grupo7.ticket_system.models.Event;
@@ -16,8 +17,12 @@ public class EventRepository {
     //save event
     public Event saveEvent(Event event){
         String sqltosaveevent= "INSERT INTO evento(fecha_evento,id_estadio,id_admin,id_equipo_local,id_equipo_visitante) VALUES (?,?,?,?,?)";
-        template.update(sqltosaveevent,event.getEventDate(), event.getStadiumId(), event.getAdminId(), event.getLocalTeamId(), 
-                        event.getVisitorTeamId());
+        try {
+            template.update(sqltosaveevent,event.getEventDate(), event.getStadiumId(), event.getAdminId(), event.getLocalTeamId(), 
+                            event.getVisitorTeamId());
+        } catch (DataIntegrityViolationException e) {
+            throw new IllegalArgumentException("No se pudo crear el evento: estadio, admin o equipos invalidos");
+        }
         
         String sqltogeteventid= "SELECT LAST_INSERT_ID()";        
         event.setEventId(template.queryForObject(sqltogeteventid, int.class));
@@ -69,6 +74,18 @@ public class EventRepository {
                    nombre_equipo
             FROM equipo
             ORDER BY nombre_equipo
+            """;
+        return template.queryForList(sql);
+    }
+
+    public List<Map<String, Object>> findAllAdmins() {
+        String sql = """
+            SELECT id_usuario,
+                   nombre_usuario,
+                   mail
+            FROM usuario
+            WHERE rol = 'ADMIN'
+            ORDER BY nombre_usuario
             """;
         return template.queryForList(sql);
     }

@@ -1,9 +1,7 @@
 package com.grupo7.ticket_system.events;
 
-import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Service;
 import com.grupo7.ticket_system.models.Event;
-import com.grupo7.ticket_system.users.UserRepository;
 
 import java.util.List;
 import java.util.Map;
@@ -12,11 +10,9 @@ import java.util.Map;
 public class EventService {
     
     private final EventRepository eventRepository;
-    private final UserRepository userRepository;
 
-    EventService(EventRepository eventRepository, UserRepository userRepository) {
+    EventService(EventRepository eventRepository) {
         this.eventRepository = eventRepository;
-        this.userRepository = userRepository;
     }
 
     public Event createEvent(Event event){
@@ -26,15 +22,12 @@ public class EventService {
         if (event.getEventDate() == null) {
             throw new IllegalArgumentException("La fecha del evento es obligatoria");
         }
-        if (event.getStadiumId() <= 0 || event.getLocalTeamId() <= 0 || event.getVisitorTeamId() <= 0) {
-            throw new IllegalArgumentException("Estadio y equipos son obligatorios");
+        if (event.getStadiumId() <= 0 || event.getAdminId() <= 0 || event.getLocalTeamId() <= 0 || event.getVisitorTeamId() <= 0) {
+            throw new IllegalArgumentException("Estadio, admin y equipos son obligatorios");
         }
         if (event.getLocalTeamId() == event.getVisitorTeamId()) {
             throw new IllegalArgumentException("El equipo local y visitante no pueden ser el mismo");
         }
-        event.setAdminId(userRepository.getUserIdByUsername(
-                SecurityContextHolder.getContext().getAuthentication().getName()
-        ));
 
         if(!eventRepository.existsByStadiumAndDateTime(event)){
             return eventRepository.saveEvent(event);
@@ -54,5 +47,9 @@ public class EventService {
 
     public List<Map<String, Object>> getAllTeams() {
         return eventRepository.findAllTeams();
+    }
+
+    public List<Map<String, Object>> getAllAdmins() {
+        return eventRepository.findAllAdmins();
     }
 }

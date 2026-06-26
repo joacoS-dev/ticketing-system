@@ -19,6 +19,12 @@ public class Event {
     public void setAdminId(int adminId) {
         this.adminId = adminId;
     }
+    public int getUserId() {
+        return adminId;
+    }
+    public void setUserId(int userId) {
+        this.adminId = userId;
+    }
 
     public int getEventId() {
         return eventId;

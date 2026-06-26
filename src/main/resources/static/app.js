@@ -374,6 +374,7 @@ $("#transferForm").addEventListener("submit", async (e) => {
 
 async function cargarOpcionesAdmin() {
   const eventStadiumSelect = $("#eventStadiumSelect");
+  const eventAdminSelect = $("#eventAdminSelect");
   const sectionStadiumSelect = $("#sectionStadiumSelect");
   const querySectionStadiumSelect = $("#querySectionStadiumSelect");
   const localTeamSelect = $("#localTeamSelect");
@@ -382,6 +383,7 @@ async function cargarOpcionesAdmin() {
 
   if (getRole() !== "ADMIN") {
     limpiarSelect(eventStadiumSelect, "Iniciá sesión como ADMIN para cargar estadios");
+    limpiarSelect(eventAdminSelect, "Iniciá sesión como ADMIN para cargar admins");
     limpiarSelect(sectionStadiumSelect, "Iniciá sesión como ADMIN para cargar estadios");
     limpiarSelect(querySectionStadiumSelect, "Iniciá sesión como ADMIN para cargar estadios");
     limpiarSelect(localTeamSelect, "Iniciá sesión como ADMIN para cargar equipos");
@@ -405,10 +407,28 @@ async function cargarOpcionesAdmin() {
     });
   } catch (error) {
     limpiarSelect(eventStadiumSelect, "No se pudieron cargar estadios");
+    limpiarSelect(eventAdminSelect, "No se pudieron cargar admins");
     limpiarSelect(sectionStadiumSelect, "No se pudieron cargar estadios");
     limpiarSelect(querySectionStadiumSelect, "No se pudieron cargar estadios");
     mostrarError(new Error("Error al cargar estadios: " + error.message), "salidaEvento");
     mostrarSalida("Error: Error al cargar estadios: " + error.message, "salidaSector");
+  }
+
+  try {
+    const admins = await llamarApi("/events/admins");
+
+    limpiarSelect(eventAdminSelect, "Elegí un admin");
+    admins.forEach((admin) => {
+      const label = "#" + admin.id_usuario + " - " + admin.nombre_usuario + " - " + admin.mail;
+      eventAdminSelect.append(new Option(label, admin.id_usuario));
+    });
+
+    if (eventAdminSelect.options.length === 1) {
+      limpiarSelect(eventAdminSelect, "No hay admins cargados");
+    }
+  } catch (error) {
+    limpiarSelect(eventAdminSelect, "No se pudieron cargar admins");
+    mostrarError(new Error("Error al cargar admins: " + error.message), "salidaEvento");
   }
 
   try {
@@ -495,6 +515,7 @@ $("#eventForm").addEventListener("submit", async (e) => {
   const body = {
     eventDate: data.eventDate.replace("T", " "),
     stadiumId: numero(data.stadiumId),
+    userId: numero(data.userId),
     localTeamId: numero(data.localTeamId),
     visitorTeamId: numero(data.visitorTeamId)
   };

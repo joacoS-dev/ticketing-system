@@ -37,4 +37,9 @@ public class EventController {
     public List<Map<String, Object>> getAllTeams() {
         return eventService.getAllTeams();
     }
+
+    @GetMapping("/admins")
+    public List<Map<String, Object>> getAllAdmins() {
+        return eventService.getAllAdmins();
+    }
 }
