@@ -243,6 +243,25 @@
     <pre id="salidaQr">Todavía no hay respuesta.</pre>
   </div>
 
+  <h2>10. Funcionario: asignar dispositivo</h2>
+  <form id="assignDeviceForm" class="box" data-roles="FUNCIONARIO">
+    <p>Rol necesario: FUNCIONARIO.</p>
+
+    <label>Dispositivo</label>
+    <select id="assignDeviceSelect" name="deviceId" required>
+      <option value="">Iniciá sesión como FUNCIONARIO para cargar dispositivos</option>
+    </select>
+
+    <label>ID de funcionario</label>
+    <input id="assignFuncionarioId" name="userId" type="number" min="1" required>
+
+    <button type="submit">Asignar dispositivo</button>
+  </form>
+  <div class="section-output">
+    <strong>Respuesta del backend</strong>
+    <pre id="salidaAssignDevice">Todavía no hay respuesta.</pre>
+  </div>
+
   <script src="app.js"></script>
 </body>
 </html>

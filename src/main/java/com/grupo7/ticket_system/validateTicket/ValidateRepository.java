@@ -33,6 +33,24 @@ public class ValidateRepository {
         }
     }
 
+    public void assignDeviceToFuncionario(int deviceId, int userId) {
+        Integer funcionarioCount = template.queryForObject(
+                "SELECT COUNT(*) FROM funcionario WHERE id_usuario = ?",
+                Integer.class,
+                userId
+        );
+
+        if (funcionarioCount == null || funcionarioCount == 0) {
+            throw new IllegalArgumentException("El usuario no es un funcionario válido");
+        }
+
+        String sql = "UPDATE funcionario SET id_dispositivo = ? WHERE id_usuario = ?";
+        int updatedRows = template.update(sql, deviceId, userId);
+        if (updatedRows == 0) {
+            throw new IllegalArgumentException("No se pudo asignar el dispositivo al funcionario");
+        }
+    }
+
     public List<Map<String, Object>> findDevices() {
         String sql = "SELECT id_dispositivo FROM dispositivo ORDER BY id_dispositivo";
         return template.queryForList(sql);

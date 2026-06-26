@@ -30,6 +30,12 @@ public class ValidateController {
         validateService.regenerateQr(ticketId);
     }
 
+    @PostMapping("/devices/{deviceId}/assign-funcionario/{userId}")
+    public String assignDeviceToFuncionario(@PathVariable int deviceId, @PathVariable int userId) {
+        validateService.assignDeviceToFuncionario(deviceId, userId);
+        return "dispositivoAgregado";
+    }
+
     @GetMapping("/devices")
     public List<Map<String, Object>> getDevices() {
         return validateService.getDevices();
