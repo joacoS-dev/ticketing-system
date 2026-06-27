@@ -32,7 +32,7 @@ public class ValidateController {
 
     @PostMapping("/regenerateAllQr")
     public Map<String, Integer> regenerateAllTicketQr(){
-        return Map.of("ticketsUpdated", validateService.regenerateAllQr());
+        return validateService.regenerateAllQr();
     }
 
     @PostMapping("/devices/{deviceId}/assign-funcionario/{userId}")

@@ -4,6 +4,7 @@ import java.util.List;
 import java.util.Map;
 import java.util.UUID;
 
+import org.springframework.dao.DataAccessException;
 import org.springframework.stereotype.Service;
 
 @Service
@@ -24,12 +25,21 @@ public class ValidateService {
         validateRepository.regenerateQr(newQr,ticketId);
     }
 
-    public int regenerateAllQr(){
+    public Map<String, Integer> regenerateAllQr(){
         List<Integer> ticketIds = validateRepository.findAllTicketIds();
+        int updated = 0;
+        int skipped = 0;
+
         for (Integer ticketId : ticketIds) {
-            validateRepository.regenerateQr(UUID.randomUUID().toString(), ticketId);
+            try {
+                validateRepository.regenerateQr(UUID.randomUUID().toString(), ticketId);
+                updated++;
+            } catch (DataAccessException | IllegalArgumentException e) {
+                skipped++;
+            }
         }
-        return ticketIds.size();
+
+        return Map.of("ticketsUpdated", updated, "ticketsSkipped", skipped);
     }
 
     public void assignDeviceToFuncionario(int deviceId, int userId) {

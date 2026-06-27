@@ -702,8 +702,9 @@ async function regenerarTodosLosQr() {
 
     const hora = new Date().toLocaleTimeString();
     const cantidad = resultado && resultado.ticketsUpdated != null ? resultado.ticketsUpdated : "todas";
+    const omitidas = resultado && resultado.ticketsSkipped != null ? resultado.ticketsSkipped : 0;
     mostrarMensaje("QR de todas las entradas regenerados correctamente.");
-    mostrarSalida("QR regenerados para " + cantidad + " entradas a las " + hora, "salidaQr");
+    mostrarSalida("QR regenerados para " + cantidad + " entradas a las " + hora + ". Entradas omitidas: " + omitidas + ".", "salidaQr");
     return true;
   } catch (error) {
     mostrarError(new Error("Error al regenerar todos los QR: " + error.message), "salidaQr");
