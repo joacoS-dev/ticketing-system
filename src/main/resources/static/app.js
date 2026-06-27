@@ -1,4 +1,6 @@
 const API_BASE = "";
+let qrInterval = null;
+let qrRegenerating = false;
 
 const $ = (selector) => document.querySelector(selector);
 const $$ = (selector) => document.querySelectorAll(selector);
@@ -22,6 +24,7 @@ function setToken(token, role) {
 }
 
 function clearToken() {
+  detenerQrAutomatico();
   localStorage.removeItem("token");
   localStorage.removeItem("role");
   actualizarEstadoSesion();
@@ -652,20 +655,104 @@ $("#validateForm").addEventListener("submit", async (e) => {
   }
 });
 
-$("#qrForm").addEventListener("submit", async (e) => {
-  e.preventDefault();
-  const data = datosFormulario(e.target);
+async function regenerarQr(refrescarOpciones = true) {
+  const ticketId = $("#qrTicketSelect").value;
 
+  if (!ticketId) {
+    mostrarError(new Error("Elegí una entrada para regenerar el QR."), "salidaQr");
+    return false;
+  }
+
+  if (qrRegenerating) {
+    return false;
+  }
+
+  qrRegenerating = true;
   try {
-    await llamarApi(`/validates/${data.ticketId}/regenerateQr`, {
+    await llamarApi(`/validates/${ticketId}/regenerateQr`, {
       method: "POST"
     });
 
+    const hora = new Date().toLocaleTimeString();
     mostrarMensaje("QR regenerado correctamente.");
-    mostrarSalida("QR regenerado OK", "salidaQr");
-    await cargarOpcionesFuncionario();
+    mostrarSalida("QR regenerado OK a las " + hora, "salidaQr");
+
+    if (refrescarOpciones) {
+      await cargarOpcionesFuncionario();
+    }
+    return true;
   } catch (error) {
     mostrarError(new Error("Error al regenerar QR: " + error.message), "salidaQr");
+    return false;
+  } finally {
+    qrRegenerating = false;
+  }
+}
+
+async function regenerarTodosLosQr() {
+  if (qrRegenerating) {
+    return false;
+  }
+
+  qrRegenerating = true;
+  try {
+    const resultado = await llamarApi("/validates/regenerateAllQr", {
+      method: "POST"
+    });
+
+    const hora = new Date().toLocaleTimeString();
+    const cantidad = resultado && resultado.ticketsUpdated != null ? resultado.ticketsUpdated : "todas";
+    mostrarMensaje("QR de todas las entradas regenerados correctamente.");
+    mostrarSalida("QR regenerados para " + cantidad + " entradas a las " + hora, "salidaQr");
+    return true;
+  } catch (error) {
+    mostrarError(new Error("Error al regenerar todos los QR: " + error.message), "salidaQr");
+    return false;
+  } finally {
+    qrRegenerating = false;
+  }
+}
+
+async function iniciarQrAutomatico() {
+  if (qrInterval) {
+    mostrarMensaje("QR automático ya está iniciado.");
+    return;
+  }
+
+  const regenerado = await regenerarTodosLosQr();
+  if (!regenerado) {
+    return;
+  }
+
+  qrInterval = setInterval(() => {
+    regenerarTodosLosQr();
+  }, 30000);
+
+  mostrarMensaje("QR dinámico iniciado. Se regenerarán todos los QR cada 30 segundos.");
+  mostrarSalida("QR dinámico iniciado para todas las entradas. Intervalo: 30 segundos.", "salidaQr");
+}
+
+function detenerQrAutomatico() {
+  if (!qrInterval) {
+    return;
+  }
+
+  clearInterval(qrInterval);
+  qrInterval = null;
+  mostrarMensaje("QR dinámico detenido.");
+  mostrarSalida("QR dinámico detenido.", "salidaQr");
+}
+
+$("#qrForm").addEventListener("submit", async (e) => {
+  e.preventDefault();
+  await regenerarQr();
+});
+
+$("#startQrAutoBtn").addEventListener("click", iniciarQrAutomatico);
+$("#stopQrAutoBtn").addEventListener("click", detenerQrAutomatico);
+document.addEventListener("visibilitychange", () => {
+  if (document.hidden) {
+    detenerQrAutomatico();
   }
 });
 

@@ -234,14 +234,16 @@
 
   <h2>9. Funcionario: regenerar QR</h2>
   <form id="qrForm" class="box" data-roles="FUNCIONARIO">
-    <p>Rol necesario: FUNCIONARIO.</p>
+    <p>Rol necesario: FUNCIONARIO. El modo automático regenera el QR de todas las entradas cada 30 segundos.</p>
 
     <label>Entrada</label>
     <select id="qrTicketSelect" name="ticketId" required>
       <option value="">Iniciá sesión como FUNCIONARIO para cargar entradas</option>
     </select>
 
-    <button type="submit">Regenerar QR</button>
+    <button type="submit">Regenerar QR de esta entrada</button>
+    <button id="startQrAutoBtn" type="button">Iniciar QR automático</button>
+    <button id="stopQrAutoBtn" type="button">Detener QR automático</button>
   </form>
   <div class="section-output">
     <strong>Respuesta del backend</strong>

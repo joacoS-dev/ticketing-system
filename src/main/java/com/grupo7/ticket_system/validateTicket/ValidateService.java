@@ -24,6 +24,14 @@ public class ValidateService {
         validateRepository.regenerateQr(newQr,ticketId);
     }
 
+    public int regenerateAllQr(){
+        List<Integer> ticketIds = validateRepository.findAllTicketIds();
+        for (Integer ticketId : ticketIds) {
+            validateRepository.regenerateQr(UUID.randomUUID().toString(), ticketId);
+        }
+        return ticketIds.size();
+    }
+
     public void assignDeviceToFuncionario(int deviceId, int userId) {
         validateRepository.assignDeviceToFuncionario(deviceId, userId);
     }

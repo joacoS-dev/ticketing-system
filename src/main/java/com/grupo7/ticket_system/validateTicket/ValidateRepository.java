@@ -33,6 +33,11 @@ public class ValidateRepository {
         }
     }
 
+    public List<Integer> findAllTicketIds() {
+        String sql = "SELECT id_entrada FROM entrada ORDER BY id_entrada";
+        return template.queryForList(sql, Integer.class);
+    }
+
     public void assignDeviceToFuncionario(int deviceId, int userId) {
         Integer funcionarioCount = template.queryForObject(
                 "SELECT COUNT(*) FROM funcionario WHERE id_usuario = ?",
