@@ -134,8 +134,10 @@
   <form id="transferForm" class="box" data-roles="USER">
     <p>Rol necesario: USER.</p>
 
-    <label>ID entrada</label>
-    <input name="ticketId" type="number" required>
+    <label>Entrada</label>
+    <select id="transferTicketSelect" name="ticketId" required>
+      <option value="">Iniciá sesión como USER para cargar tus entradas</option>
+    </select>
 
     <label>Usuario destinatario</label>
     <input name="newOwnerUsername" required>

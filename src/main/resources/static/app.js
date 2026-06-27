@@ -19,6 +19,7 @@ function setToken(token, role) {
   actualizarEstadoSesion();
   actualizarPermisos();
   cargarOpcionesCompra();
+  cargarOpcionesTransferencia();
   cargarOpcionesAdmin();
   cargarOpcionesFuncionario();
 }
@@ -30,6 +31,7 @@ function clearToken() {
   actualizarEstadoSesion();
   actualizarPermisos();
   cargarOpcionesCompra();
+  cargarOpcionesTransferencia();
   cargarOpcionesAdmin();
   cargarOpcionesFuncionario();
 }
@@ -348,10 +350,43 @@ $("#saleForm").addEventListener("submit", async (e) => {
 
     mostrarMensaje("Venta creada correctamente.");
     mostrarSalida(respuesta, "salidaCompra");
+    await cargarOpcionesTransferencia();
   } catch (error) {
     mostrarError(new Error("Error al crear venta: " + error.message), "salidaCompra");
   }
 });
+
+function etiquetaTicketUsuario(ticket) {
+  const sector = ticket.letra_sector ? " - Sector " + ticket.letra_sector : "";
+  const validada = ticket.id_dispositivo ? " - Ya validada" : "";
+  return "#" + ticket.id_entrada + " - Evento #" + ticket.id_evento + " - " + ticket.nombre_estadio + sector + validada;
+}
+
+async function cargarOpcionesTransferencia() {
+  const transferTicketSelect = $("#transferTicketSelect");
+
+  if (getRole() !== "USER") {
+    limpiarSelect(transferTicketSelect, "Iniciá sesión como USER para cargar tus entradas");
+    return;
+  }
+
+  try {
+    const tickets = await llamarApi("/users/me/tickets");
+    const transferibles = (tickets || []).filter((ticket) => !ticket.id_dispositivo);
+
+    limpiarSelect(transferTicketSelect, "Elegí una entrada");
+    transferibles.forEach((ticket) => {
+      transferTicketSelect.append(new Option(etiquetaTicketUsuario(ticket), ticket.id_entrada));
+    });
+
+    if (transferTicketSelect.options.length === 1) {
+      limpiarSelect(transferTicketSelect, "No tenés entradas transferibles");
+    }
+  } catch (error) {
+    limpiarSelect(transferTicketSelect, "No se pudieron cargar tus entradas");
+    mostrarError(new Error("Error al cargar entradas para transferir: " + error.message), "salidaTransferencia");
+  }
+}
 
 $("#transferForm").addEventListener("submit", async (e) => {
   e.preventDefault();
@@ -370,6 +405,7 @@ $("#transferForm").addEventListener("submit", async (e) => {
 
     mostrarMensaje("Entrada transferida correctamente.");
     mostrarSalida("Transferencia OK", "salidaTransferencia");
+    await cargarOpcionesTransferencia();
   } catch (error) {
     mostrarError(new Error("Error al transferir: " + error.message), "salidaTransferencia");
   }
@@ -778,5 +814,6 @@ actualizarEstadoSesion();
 actualizarPermisos();
 cargarCodigosPostales();
 cargarOpcionesCompra();
+cargarOpcionesTransferencia();
 cargarOpcionesAdmin();
 cargarOpcionesFuncionario();
