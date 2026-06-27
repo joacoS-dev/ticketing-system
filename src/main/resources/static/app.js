@@ -243,16 +243,13 @@ $$("button[data-get]").forEach((boton) => {
 
 async function cargarOpcionesCompra() {
   const eventSelect = $("#saleEventSelect");
-  const stadiumSelect = $("#saleStadiumSelect");
   const sectionSelect = $("#saleSectionSelect");
 
   if (getRole() !== "USER") {
     eventSelect.innerHTML = "";
     eventSelect.append(new Option("Iniciá sesión como USER para cargar eventos", ""));
-    stadiumSelect.innerHTML = "";
-    stadiumSelect.append(new Option("Elegí un evento", ""));
     sectionSelect.innerHTML = "";
-    sectionSelect.append(new Option("Elegí un estadio", ""));
+    sectionSelect.append(new Option("Elegí un evento", ""));
     return;
   }
 
@@ -266,7 +263,6 @@ async function cargarOpcionesCompra() {
       const label = "#" + evento.id_evento + " - " + evento.nombre_estadio + " - " + evento.fecha_evento;
       const option = new Option(label, evento.id_evento);
       option.dataset.stadiumId = evento.id_estadio;
-      option.dataset.stadiumName = evento.nombre_estadio;
       eventSelect.append(option);
     });
   } catch (error) {
@@ -282,7 +278,7 @@ async function cargarSectoresCompra(stadiumId) {
   sectionSelect.innerHTML = "";
 
   if (!stadiumId) {
-    sectionSelect.append(new Option("Elegí un estadio", ""));
+    sectionSelect.append(new Option("Elegí un evento", ""));
     return;
   }
 
@@ -308,15 +304,6 @@ async function cargarSectoresCompra(stadiumId) {
 $("#saleEventSelect").addEventListener("change", async (e) => {
   const option = e.target.selectedOptions[0];
   const stadiumId = option ? option.dataset.stadiumId : "";
-  const stadiumName = option ? option.dataset.stadiumName : "";
-  const stadiumSelect = $("#saleStadiumSelect");
-
-  stadiumSelect.innerHTML = "";
-  if (stadiumId) {
-    stadiumSelect.append(new Option("#" + stadiumId + " - " + stadiumName, stadiumId));
-  } else {
-    stadiumSelect.append(new Option("Elegí un evento", ""));
-  }
 
   await cargarSectoresCompra(stadiumId);
 });
@@ -357,9 +344,15 @@ $("#saleForm").addEventListener("submit", async (e) => {
 });
 
 function etiquetaTicketUsuario(ticket) {
-  const sector = ticket.letra_sector ? " - Sector " + ticket.letra_sector : "";
-  const validada = ticket.id_dispositivo ? " - Ya validada" : "";
-  return "#" + ticket.id_entrada + " - Evento #" + ticket.id_evento + " - " + ticket.nombre_estadio + sector + validada;
+  const ticketId = ticket.ticketId ?? ticket.id_entrada;
+  const eventId = ticket.eventId ?? ticket.id_evento;
+  const stadiumName = ticket.stadiumName ?? ticket.nombre_estadio;
+  const sectionId = ticket.sectionId ?? ticket.id_sector;
+  const sectionLetter = ticket.sectionLetter ?? ticket.letra_sector;
+  const deviceId = ticket.deviceId ?? ticket.id_dispositivo;
+  const sector = sectionLetter ? " - Sector " + sectionLetter + " (#" + sectionId + ")" : "";
+  const validada = deviceId ? " - Ya validada" : "";
+  return "Entrada #" + ticketId + " - Evento #" + eventId + " - " + stadiumName + sector + validada;
 }
 
 async function cargarOpcionesTransferencia() {
@@ -372,11 +365,12 @@ async function cargarOpcionesTransferencia() {
 
   try {
     const tickets = await llamarApi("/users/me/tickets");
-    const transferibles = (tickets || []).filter((ticket) => !ticket.id_dispositivo);
+    const transferibles = (tickets || []).filter((ticket) => !(ticket.deviceId ?? ticket.id_dispositivo));
 
     limpiarSelect(transferTicketSelect, "Elegí una entrada");
     transferibles.forEach((ticket) => {
-      transferTicketSelect.append(new Option(etiquetaTicketUsuario(ticket), ticket.id_entrada));
+      const ticketId = ticket.ticketId ?? ticket.id_entrada;
+      transferTicketSelect.append(new Option(etiquetaTicketUsuario(ticket), ticketId));
     });
 
     if (transferTicketSelect.options.length === 1) {

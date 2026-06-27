@@ -17,8 +17,11 @@ public class TransferRepository {
 
     //transfer ticket to another user
     public void saveTransfer(int ticketId, int newOwnerId,int ownerId){
-        String sqltotransferticket= "UPDATE entrada SET id_usuario=?, cantidad_transferencias_realizadas= cantidad_transferencias_realizadas + 1 WHERE id_entrada= ?"; 
-        template.update(sqltotransferticket, newOwnerId,ticketId);
+        String sqltotransferticket= "UPDATE entrada SET id_usuario=?, cantidad_transferencias_realizadas= cantidad_transferencias_realizadas + 1 WHERE id_entrada= ? AND id_usuario = ? LIMIT 1"; 
+        int updatedRows = template.update(sqltotransferticket, newOwnerId, ticketId, ownerId);
+        if (updatedRows == 0) {
+            throw new IllegalArgumentException("Entrada invalida o no pertenece al usuario logueado");
+        }
 
         String sqltoinserttransfer= "INSERT INTO transferencia(fecha_transferencia, estado_transferencia, id_entrada, id_usuario_recibe, id_usuario_envia) VALUES(?,?,?,?,?)";
         template.update(sqltoinserttransfer,LocalDateTime.now(), true, ticketId, newOwnerId, ownerId);

@@ -76,14 +76,15 @@ public class UserRepository {
 
     public List<Map<String, Object>> findTicketsByUserId(int userId) {
         String sql = """
-            SELECT e.id_entrada,
-                   e.id_evento,
-                   ev.fecha_evento,
-                   es.nombre_estadio,
-                   s.letra_sector,
-                   e.qr_entrada,
-                   e.cantidad_transferencias_realizadas,
-                   e.id_dispositivo
+            SELECT e.id_entrada AS ticketId,
+                   e.id_evento AS eventId,
+                   ev.fecha_evento AS eventDate,
+                   es.nombre_estadio AS stadiumName,
+                   e.id_sector AS sectionId,
+                   s.letra_sector AS sectionLetter,
+                   e.qr_entrada AS qrToken,
+                   e.cantidad_transferencias_realizadas AS transfersMade,
+                   e.id_dispositivo AS deviceId
             FROM entrada e
             JOIN evento ev ON ev.id_evento = e.id_evento
             JOIN estadio es ON es.id_estadio = e.id_estadio
